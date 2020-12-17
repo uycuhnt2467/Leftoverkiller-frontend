@@ -1,25 +1,64 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+// import { connect } from "react-redux";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// import Layout from "./hoc/Layout/Layout";
+// import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
+// import Checkout from "./containers/Checkout/Checkout";
+// import Orders from "./containers/Orders/Orders";
+// import Auth from "./containers/Auth/Auth";
+// import Logout from "./containers/Auth/Logout/Logout";
+import SearchReicipe from "./containers/SearchRecipe/SearchRecipe";
+import Recipe from "./containers/Recipe/Recipe";
+// import * as actions from "./store/actions/index";
+
+class App extends Component {
+    componentDidMount() {
+        // this.props.onTryAutoSignup();
+    }
+    render() {
+        // let routes = (
+        //     <Switch>
+        //         <Route path="/" component={SearchReicipe} />
+        //         <Route path="/auth" component={Auth} />
+        //         <Route path="/" exact component={BurgerBuilder} />
+        //         <Redirect to="/" />
+        //     </Switch>
+        // );
+
+        // if (this.props.isAuthenticated) {
+        //     routes = (
+        //         <Switch>
+        //             <Route path="/test" component={SearchReicipe} />
+        //             <Route path="/checkout" component={Checkout} />
+        //             <Route path="/orders" component={Orders} />
+        //             <Route path="/logout" component={Logout} />
+        //             <Route path="/" exact component={BurgerBuilder} />
+        //             <Redirect to="/" />
+        //         </Switch>
+        //     );
+        // }
+        return (
+            <Switch>
+                <Route path="/" exact component={SearchReicipe} />
+                <Route path="/recipe/:recipeId" component={Recipe} />
+                <Redirect to="/" />
+            </Switch>
+        );
+    }
 }
 
+// const mapStateToProps = (state) => {
+//     return {
+//         isAuthenticated: state.auth.token !== null,
+//     };
+// };
+
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         onTryAutoSignup: () => dispatch(actions.authCheckState()),
+//     };
+// };
+
+// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
 export default App;
