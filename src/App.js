@@ -8,7 +8,8 @@ import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 // import Orders from "./containers/Orders/Orders";
 // import Auth from "./containers/Auth/Auth";
 // import Logout from "./containers/Auth/Logout/Logout";
-import SearchReicipe from "./containers/SearchRecipe/SearchRecipe";
+import SearchByReicipe from "./containers/SearchByRecipe/SearchByRecipe";
+import SearchByIngredient from "./containers/SearchByIngredient/SearchByIngredient";
 import Recipe from "./containers/Recipe/Recipe";
 // import * as actions from "./store/actions/index";
 
@@ -40,7 +41,11 @@ class App extends Component {
         // }
         return (
             <Switch>
-                <Route path="/" exact component={SearchReicipe} />
+                <Route path="/" exact component={SearchByReicipe} />
+                <Route
+                    path="/searchByIngredient"
+                    component={SearchByIngredient}
+                />
                 <Route path="/recipe/:recipeId" component={Recipe} />
                 <Redirect to="/" />
             </Switch>

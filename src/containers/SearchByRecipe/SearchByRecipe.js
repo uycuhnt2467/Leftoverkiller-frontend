@@ -82,7 +82,7 @@ class SearchIngredient extends Component {
                     type="text"
                     onChange={this.handleSearchChange}
                     name="curSearch"
-                    placeholder="Any Ingredient"
+                    placeholder="Any Recipe"
                     value={this.state.currentQuery}
                 ></input>
                 <button type="submit" onClick={this.handleSearchClick}>
