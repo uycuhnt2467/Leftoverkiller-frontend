@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
@@ -7,7 +7,6 @@ import Aux from "../../hoc/Auxx/Auxx";
 import Spinner from "../../components/UI/Spinner/Spinner";
 // import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 // import * as actions from "../../store/actions/index";
-
 
 class SearchIngredient extends Component {
     // constructor(props) {
@@ -89,19 +88,20 @@ class SearchIngredient extends Component {
                     Search
                 </button>
                 {curRecipe}
+                
             </Aux>
         );
     }
 }
 // define components
 function recipe_info(key, recipe_data) {
+    let link_string = "/recipe/" + recipe_data.recipe_id;
     return (
-        <div key={key}>
-            <li>
-                <td>{recipe_data.recipe_id}</td>
-                <td>{recipe_data.recipe_name}</td>
-            </li>
-        </div>
+        <ul key={key}>
+            <li>{recipe_data.recipe_id}</li>
+            <li>{recipe_data.recipe_name}</li>
+            <li><Link to={link_string}>recipe link</Link></li>
+        </ul>
     );
 }
 

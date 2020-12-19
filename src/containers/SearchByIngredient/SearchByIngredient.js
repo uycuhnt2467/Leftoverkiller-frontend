@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 
 import Aux from "../../hoc/Auxx/Auxx";
 
 // import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 // import Spinner from "../../components/UI/Spinner/Spinner";
 // import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-// import * as actions from "../../store/actions/index";
+import * as actions from "../../store/actions/index";
 import axios from "axios";
 
 class SearchIngredient extends Component {
@@ -15,13 +15,13 @@ class SearchIngredient extends Component {
     //     this.state = {...}
     // }
     state = {
-        ingredient_list: [""],
+        // ingredient_list: [""],
         matching_recipe: [
-            {
-                recipe_id: "",
-                recipe_name: "",
-                img_url: "",
-            },
+            // {
+            //     recipe_id: "",
+            //     recipe_name: "",
+            //     img_url: "",
+            // },
         ],
         currentQuery: "",
         success: false,
@@ -39,20 +39,15 @@ class SearchIngredient extends Component {
 
     handleAddClick = (e) => {
         e.preventDefault();
-
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                ingredient_list: [
-                    ...prevState.ingredient_list,
-                    prevState.currentQuery,
-                ],
-            };
-        });
-
+        this.props.onIngredientAdded(this.state.currentQuery);
         this.setState((prevState) => ({
             currentQuery: "",
         }));
+    };
+
+    handleRemoveClick = (e) => {
+        e.preventDefault();
+        this.props.onIngredientRemoved(e.target.value);
     };
 
     handleSearchClick = (e) => {
@@ -61,14 +56,13 @@ class SearchIngredient extends Component {
         const url =
             "http://18.222.31.30/leftover_killer/get_matching_recipes.php";
         axios
-            .post(`${cors}${url}`, { ingredients: this.state.ingredient_list })
+            .post(`${cors}${url}`, { ingredients: this.props.ingredient_list })
             .then((res) => {
                 // http://18.222.31.30/leftover_killer/get_recipes.php
                 // http://localhost/leftoverkiller2/get_recipes.php
-                console.log(res.data);
+                // console.log(res.data);
                 const recipes = res.data.recipes;
-
-                console.log(recipes);
+                // console.log(recipes);
                 if (res.data.success) {
                     this.setState({
                         success: res.data.success,
@@ -83,8 +77,8 @@ class SearchIngredient extends Component {
     };
 
     render() {
-        let cur_ingredient = this.state.ingredient_list.map((val, idx) => {
-            return ingredient_display(idx, val);
+        let cur_ingredient = this.props.ingredient_list.map((val, idx) => {
+            return ingredient_display(idx, val, this.handleRemoveClick);
         });
 
         let found_recipe = this.state.matching_recipe.map((val, idx) => {
@@ -106,55 +100,58 @@ class SearchIngredient extends Component {
                 <button type="submit" onClick={this.handleSearchClick}>
                     Search
                 </button>
-                <table>
-                    <thead>Current Ingredient</thead>
-                    <tbody>{cur_ingredient}</tbody>
-                </table>
-                <table>
-                    <thead>Found Recipe</thead>
-                    <tbody>{found_recipe}</tbody>
-                </table>
+
+                <h1>Current Ingredient</h1>
+                {cur_ingredient ? cur_ingredient : null}
+
+                <h1>Found Recipe</h1>
+
+                {found_recipe.length > 0 ? found_recipe : null}
             </Aux>
         );
     }
 }
 
-const ingredient_display = (key, ingredient_value) => {
-    return <tr key={key}>{ingredient_value}</tr>;
+const ingredient_display = (key, ingredient_value, fun) => {
+    return (
+        <ul key={key}>
+            <li>{ingredient_value}</li>
+            <li>
+                <button type="submit" onClick={fun} value={ingredient_value}>
+                    Remove
+                </button>
+            </li>
+        </ul>
+    );
 };
 
 const recipe_display = (key, recipe) => {
     return (
-        <tr key={key}>
-            {recipe.recipe_name} <img src={recipe.img_url} alt="lala" />
-        </tr>
+        <ul key={key}>
+            <li>
+                {recipe.recipe_name} <img src={recipe.img_url} alt="lala" />
+            </li>
+        </ul>
     );
 };
 
-// const mapStateToProps = (state) => {
-//     return {
-//         ings: state.burgerBuilder.ingredients,
-//         price: state.burgerBuilder.totalPrice,
-//         error: state.burgerBuilder.error,
-//         isAuthenticated: state.auth.token !== null,
-//     };
-// };
+const mapStateToProps = (state) => {
+    return {
+        ingredient_list: state.ingredientsReducer.ingredients,
+    };
+};
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         onIngredientAdded: (ingName) =>
-//             dispatch(actions.addIngredient(ingName)),
-//         onIngredientRemoved: (ingName) =>
-//             dispatch(actions.removeIngredient(ingName)),
-//         onInitIngredients: () => dispatch(actions.initIngredients()),
-//         onInitPurchase: () => dispatch(actions.purchaseInit()),
-//         onSetAuthRedirectPath: (path) =>
-//             dispatch(actions.setAuthRedirectPath(path)),
-//     };
-// };
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onIngredientAdded: (ingName) =>
+            dispatch(actions.addIngredient(ingName)),
+        onIngredientRemoved: (ingName) =>
+            dispatch(actions.removeIngredient(ingName)),
+    };
+};
 
 // export default connect(
 //     mapStateToProps,
 //     mapDispatchToProps
 // )(withErrorHandler(BurgerBuilder, axios));
-export default SearchIngredient;
+export default connect(mapStateToProps, mapDispatchToProps)(SearchIngredient);

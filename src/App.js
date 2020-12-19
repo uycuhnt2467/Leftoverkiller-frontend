@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 
 // import Layout from "./hoc/Layout/Layout";
 // import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
@@ -11,7 +11,7 @@ import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import SearchByReicipe from "./containers/SearchByRecipe/SearchByRecipe";
 import SearchByIngredient from "./containers/SearchByIngredient/SearchByIngredient";
 import Recipe from "./containers/Recipe/Recipe";
-// import * as actions from "./store/actions/index";
+import * as actions from "./store/actions/index";
 
 class App extends Component {
     componentDidMount() {
@@ -66,4 +66,4 @@ class App extends Component {
 // };
 
 // export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
-export default App;
+export default withRouter(App);

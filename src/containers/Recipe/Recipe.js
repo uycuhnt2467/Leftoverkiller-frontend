@@ -51,7 +51,7 @@ class Recipe extends Component {
 
     render() {
         let curRecipe = recipe_info(0, this.state.recipe);
-        return <Aux>{curRecipe}</Aux>;
+        return <Aux>{curRecipe?curRecipe:""}</Aux>;
     }
 }
 
@@ -62,16 +62,18 @@ function recipe_info(key, recipe_data) {
     return (
         <div key={key}>
             <table>
-                <tr>
-                    <th>{recipe_data.recipe_id}</th>
-                    <th>
-                        <img src={recipe_data.img_url} alt="lala" />
-                    </th>
-                    <th>{recipe_data.recipe_name}</th>
-                    <th>{recipe_data.popularity}</th>
-                    <th>{recipe_data.instructions}</th>
-                    <td>{ingredients_info}</td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th>{recipe_data.recipe_id}</th>
+                        <th>
+                            <img src={recipe_data.img_url} alt="lala" />
+                        </th>
+                        <th>{recipe_data.recipe_name}</th>
+                        <th>{recipe_data.popularity}</th>
+                        <th>{recipe_data.instructions}</th>
+                        <th>{ingredients_info}</th>
+                    </tr>
+                </tbody>
             </table>
         </div>
     );
@@ -81,11 +83,13 @@ function ingredient_info(key, ingredient) {
     return (
         <div key={key}>
             <table>
-                <tr>
-                    <th>{ingredient.id}</th>
-                    <th>{ingredient.name}</th>
-                    <th>{ingredient.imageURL}</th>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th>{ingredient.id}</th>
+                        <th>{ingredient.name}</th>
+                        <th>{ingredient.imageURL}</th>
+                    </tr>
+                </tbody>
             </table>
         </div>
     );
