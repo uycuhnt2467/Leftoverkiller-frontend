@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import SearchByReicipe from "./containers/SearchByRecipe/SearchByRecipe";
 import SearchByIngredient from "./containers/SearchByIngredient/SearchByIngredient";
 import Recipe from "./containers/Recipe/Recipe";
+import Favorite from "./containers/Favorite/Favorite";
 import * as actions from "./store/actions/index";
 
 class App extends Component {
@@ -47,6 +48,7 @@ class App extends Component {
                     component={SearchByIngredient}
                 />
                 <Route path="/recipe/:recipeId" component={Recipe} />
+                <Route path="/favorite" component={Favorite} />
                 <Redirect to="/" />
             </Switch>
         );

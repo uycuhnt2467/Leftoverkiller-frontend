@@ -16,11 +16,13 @@ import App from "./App";
 // import orderReducer from "./store/reducers/order";
 // import authReducer from "./store/reducers/auth";
 import ingredientsReducer from "./store/reducers/ingredients";
+import favoriteReducer from "./store/reducers/favorite";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
     ingredientsReducer: ingredientsReducer,
+    favoriteReducer: favoriteReducer,
 });
 
 const myReducer = persistReducer(

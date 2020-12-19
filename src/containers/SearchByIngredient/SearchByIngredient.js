@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import Aux from "../../hoc/Auxx/Auxx";
 
@@ -26,6 +27,31 @@ class SearchIngredient extends Component {
         currentQuery: "",
         success: false,
     };
+
+    componentDidMount() {
+        const cors = "https://cors-anywhere.herokuapp.com/";
+        const url =
+            "http://18.222.31.30/leftover_killer/get_matching_recipes.php";
+        axios
+            .post(`${cors}${url}`, { ingredients: this.props.ingredient_list })
+            .then((res) => {
+                // http://18.222.31.30/leftover_killer/get_recipes.php
+                // http://localhost/leftoverkiller2/get_recipes.php
+                // console.log(res.data);
+                const recipes = res.data.recipes;
+                // console.log(recipes);
+                if (res.data.success) {
+                    this.setState({
+                        success: res.data.success,
+                        matching_recipe: recipes,
+                    });
+                } else {
+                    console.log("no return");
+                }
+
+                //
+            });
+    }
 
     handleIngredientInputChange = (e) => {
         e.preventDefault();
@@ -126,10 +152,12 @@ const ingredient_display = (key, ingredient_value, fun) => {
 };
 
 const recipe_display = (key, recipe) => {
+    let link_string = "/recipe/" + recipe.recipe_id;
     return (
         <ul key={key}>
+            <li>{recipe.recipe_name}</li>
             <li>
-                {recipe.recipe_name} <img src={recipe.img_url} alt="lala" />
+                <Link to={link_string}>recipe link</Link>
             </li>
         </ul>
     );

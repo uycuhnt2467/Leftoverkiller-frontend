@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
+import * as actions from "../../store/actions/index";
 
 class Recipe extends Component {
     state = {
@@ -49,13 +50,30 @@ class Recipe extends Component {
         });
     }
 
+    handleAddFavorite = (e) => {
+        e.preventDefault();
+        console.log(e.target.value);
+        this.props.onFavoriteAdded(e.target.value);
+    };
+
+    handleRemoveFavorite = (e) => {
+        e.preventDefault();
+        console.log(e.target.value);
+        this.props.onFavoriteRemoved(e.target.value);
+    };
+
     render() {
-        let curRecipe = recipe_info(0, this.state.recipe);
-        return <Aux>{curRecipe?curRecipe:""}</Aux>;
+        let curRecipe = recipe_info(
+            0,
+            this.state.recipe,
+            this.handleAddFavorite,
+            this.handleRemoveFavorite
+        );
+        return <Aux>{curRecipe ? curRecipe : ""}</Aux>;
     }
 }
 
-function recipe_info(key, recipe_data) {
+function recipe_info(key, recipe_data, addFun, removeFun) {
     let ingredients_info = recipe_data.ingredients.map((ingredient) => {
         return ingredient_info(ingredient.name, ingredient);
     });
@@ -72,6 +90,24 @@ function recipe_info(key, recipe_data) {
                         <th>{recipe_data.popularity}</th>
                         <th>{recipe_data.instructions}</th>
                         <th>{ingredients_info}</th>
+                        <th>
+                            <button
+                                type="submit"
+                                onClick={addFun}
+                                value={recipe_data.recipe_id}
+                            >
+                                AddFav
+                            </button>
+                        </th>
+                        <th>
+                            <button
+                                type="submit"
+                                onClick={removeFun}
+                                value={recipe_data.recipe_id}
+                            >
+                                RemoveFav
+                            </button>
+                        </th>
                     </tr>
                 </tbody>
             </table>
@@ -95,4 +131,20 @@ function ingredient_info(key, ingredient) {
     );
 }
 
-export default Recipe;
+const mapStateToProps = (state) => {
+    return {
+        favorite_recipe_id: state.favoriteReducer.favorite_recipe_id,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onFavoriteAdded: (recipe_id) =>
+            dispatch(actions.addFavorite(recipe_id)),
+        onFavoriteRemoved: (recipe_id) =>
+            dispatch(actions.removeFavorite(recipe_id)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Recipe);
+// export default Recipe;

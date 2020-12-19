@@ -1,10 +1,3 @@
-// export {
-//     addIngredient,
-//     removeIngredient,
-//     initIngredients
-// } from './burgerBuilder';
+export { addIngredient, removeIngredient } from "./ingredients";
 
-export {
-    addIngredient,
-    removeIngredient
-} from "./ingredients"
+export { addFavorite, removeFavorite } from "./favorite";
