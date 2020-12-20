@@ -3,7 +3,10 @@ import { connect } from "react-redux";
 import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
+import Spinner from "../../components/UI/Spinner/Spinner";
 import * as actions from "../../store/actions/index";
+
+import classes from "./Recipe.module.css";
 
 class Recipe extends Component {
     state = {
@@ -17,6 +20,7 @@ class Recipe extends Component {
             ingredients: [],
         },
         error: "",
+        loading: false,
     };
 
     componentDidMount() {
@@ -44,6 +48,7 @@ class Recipe extends Component {
                         ingredients: res.data.ingredients,
                         img_url: res.data.img_url,
                     },
+                    loading: true,
                 };
             });
             console.log(res.data);
@@ -63,13 +68,16 @@ class Recipe extends Component {
     };
 
     render() {
-        let curRecipe = recipe_info(
-            0,
-            this.state.recipe,
-            this.handleAddFavorite,
-            this.handleRemoveFavorite
-        );
-        return <Aux>{curRecipe ? curRecipe : ""}</Aux>;
+        let curRecipe = <Spinner />;
+        if (this.state.loading) {
+            curRecipe = recipe_info(
+                0,
+                this.state.recipe,
+                this.handleAddFavorite,
+                this.handleRemoveFavorite
+            );
+        }
+        return <Aux><h1 className={classes.test}>lala</h1>{curRecipe}</Aux>;
     }
 }
 

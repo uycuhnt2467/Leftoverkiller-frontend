@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Aux from "../../hoc/Auxx/Auxx";
 
 // import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
-// import Spinner from "../../components/UI/Spinner/Spinner";
+import Spinner from "../../components/UI/Spinner/Spinner";
 // import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../store/actions/index";
 import axios from "axios";
@@ -26,6 +26,7 @@ class SearchIngredient extends Component {
         ],
         currentQuery: "",
         success: false,
+        loading: false,
     };
 
     componentDidMount() {
@@ -44,6 +45,7 @@ class SearchIngredient extends Component {
                     this.setState({
                         success: res.data.success,
                         matching_recipe: recipes,
+                        loading: true,
                     });
                 } else {
                     console.log("no return");

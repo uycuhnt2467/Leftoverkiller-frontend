@@ -29,6 +29,7 @@ class SearchIngredient extends Component {
             },
         ],
         currentQuery: "",
+        loading: false,
     };
 
     componentDidMount() {
@@ -39,7 +40,11 @@ class SearchIngredient extends Component {
             // http://localhost/leftoverkiller2/get_recipes.php
             const recipes = res.data.recipes;
             console.log(recipes);
-            this.setState({ allrecipe: recipes, currentRecipe: recipes });
+            this.setState({
+                allrecipe: recipes,
+                currentRecipe: recipes,
+                loading: true,
+            });
         });
     }
 
@@ -71,9 +76,12 @@ class SearchIngredient extends Component {
     };
 
     render() {
-        let curRecipe = this.state.currentRecipe.map((val, idx) => {
-            return recipe_info(idx, val);
-        });
+        let curRecipe = <Spinner />;
+        if (this.state.loading) {
+            curRecipe = this.state.currentRecipe.map((val, idx) => {
+                return recipe_info(idx, val);
+            });
+        }
 
         return (
             <Aux>
@@ -88,7 +96,6 @@ class SearchIngredient extends Component {
                     Search
                 </button>
                 {curRecipe}
-                
             </Aux>
         );
     }
@@ -100,7 +107,9 @@ function recipe_info(key, recipe_data) {
         <ul key={key}>
             <li>{recipe_data.recipe_id}</li>
             <li>{recipe_data.recipe_name}</li>
-            <li><Link to={link_string}>recipe link</Link></li>
+            <li>
+                <Link to={link_string}>recipe link</Link>
+            </li>
         </ul>
     );
 }

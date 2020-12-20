@@ -10,7 +10,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
 
-import "./index.css";
+import "./index.module.css";
 import App from "./App";
 // import burgerBuilderReducer from "./store/reducers/burgerBuilder";
 // import orderReducer from "./store/reducers/order";

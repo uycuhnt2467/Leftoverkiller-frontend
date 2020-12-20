@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
+import Spinner from "../../components/UI/Spinner/Spinner";
 import * as actions from "../../store/actions/index";
 
 class Favroite extends Component {
@@ -17,6 +18,7 @@ class Favroite extends Component {
             // }
         ],
         error: "",
+        loading: false,
     };
 
     componentDidMount() {
@@ -52,6 +54,7 @@ class Favroite extends Component {
                         ...prevState.favorite_recipe_info,
                         res.data,
                     ],
+                    loading: true,
                 };
             });
             console.log(res.data);
@@ -59,15 +62,18 @@ class Favroite extends Component {
     }
 
     render() {
-        let favorite_recipe = this.state.favorite_recipe_info.map(
-            (val, idx) => {
-                return recipe_display(idx, val);
-            }
-        );
+        let favorite_recipe = <Spinner />;
+        if (this.state.loading) {
+            favorite_recipe = this.state.favorite_recipe_info.map(
+                (val, idx) => {
+                    return recipe_display(idx, val);
+                }
+            );
+        }
         return (
             <Aux>
                 <h1>Favorite Recipe</h1>
-                {favorite_recipe.length > 0 ? favorite_recipe : null}
+                {favorite_recipe}
             </Aux>
         );
     }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-// import Layout from "./hoc/Layout/Layout";
+import Layout from "./hoc/Layout/Layout";
 // import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
 // import Checkout from "./containers/Checkout/Checkout";
 // import Orders from "./containers/Orders/Orders";
@@ -12,6 +12,8 @@ import SearchByReicipe from "./containers/SearchByRecipe/SearchByRecipe";
 import SearchByIngredient from "./containers/SearchByIngredient/SearchByIngredient";
 import Recipe from "./containers/Recipe/Recipe";
 import Favorite from "./containers/Favorite/Favorite";
+import classes from "./App.module.css";
+
 import * as actions from "./store/actions/index";
 
 class App extends Component {
@@ -41,16 +43,27 @@ class App extends Component {
         //     );
         // }
         return (
-            <Switch>
-                <Route path="/" exact component={SearchByReicipe} />
-                <Route
-                    path="/searchByIngredient"
-                    component={SearchByIngredient}
-                />
-                <Route path="/recipe/:recipeId" component={Recipe} />
-                <Route path="/favorite" component={Favorite} />
-                <Redirect to="/" />
-            </Switch>
+            <div>
+                <Layout>
+                    <Switch>
+                        <Route path="/" exact component={SearchByIngredient} />
+                        <Route
+                            path="/searchByRecipe"
+                            component={SearchByReicipe}
+                        />
+                        <Route path="/recipe/:recipeId" component={Recipe} />
+                        <Route path="/favorite" component={Favorite} />
+                        <Redirect to="/" />
+                    </Switch>
+                </Layout>
+                <h5 className={classes.warning}>
+                    This project is only for practicing. The recipe data are
+                    collected from{" "}
+                    <a href="https://www.allrecipes.com/">all recipe</a>. If the
+                    data should be removed, please don't hesitate to email to
+                    uycuhnt2467@gmail.com.
+                </h5>
+            </div>
         );
     }
 }
