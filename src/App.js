@@ -6,7 +6,7 @@ import Layout from "./hoc/Layout/Layout";
 // import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
 // import Checkout from "./containers/Checkout/Checkout";
 // import Orders from "./containers/Orders/Orders";
-// import Auth from "./containers/Auth/Auth";
+import Auth from "./containers/Auth/Auth";
 // import Logout from "./containers/Auth/Logout/Logout";
 import SearchByReicipe from "./containers/SearchByRecipe/SearchByRecipe";
 import SearchByIngredient from "./containers/SearchByIngredient/SearchByIngredient";
@@ -53,6 +53,7 @@ class App extends Component {
                         />
                         <Route path="/recipe/:recipeId" component={Recipe} />
                         <Route path="/favorite" component={Favorite} />
+                        <Route path="/auth" component={Auth}/>
                         <Redirect to="/" />
                     </Switch>
                 </Layout>
