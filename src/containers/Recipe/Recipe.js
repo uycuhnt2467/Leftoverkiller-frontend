@@ -11,14 +11,14 @@ import classes from "./Recipe.module.css";
 class Recipe extends Component {
     state = {
         success: false,
-        recipe: {
-            recipe_id: "",
-            recipe_name: "",
-            popularity: 0,
-            instructions: "",
-            img_url: "",
-            ingredients: [],
-        },
+        // recipe: {
+        //     recipe_id: "",
+        //     recipe_name: "",
+        //     popularity: 0,
+        //     instructions: "",
+        //     img_url: "",
+        //     ingredients: [],
+        // },
         error: "",
         loading: false,
     };
@@ -26,28 +26,19 @@ class Recipe extends Component {
     componentDidMount() {
         const { recipeId } = this.props.match.params;
         console.log(recipeId);
-        const cors = "https://cors-anywhere.herokuapp.com/";
-        const url =
-            "http://18.222.31.30/leftover_killer/get_recipe_details.php";
-        var bodyFormData = new FormData();
-        bodyFormData.append("recipe_id", recipeId);
-        axios.post(`${cors}${url}`, bodyFormData).then((res) => {
+
+        let url = "http://3.12.253.9:3000/recipe/";
+
+        axios.get(`${url}${recipeId}`).then((res) => {
             this.setState((prevState) => {
                 return {
-                    success: res.data.success,
+                    success: res.data.result.success,
                 };
             });
             this.setState((prevState) => {
                 return {
                     ...prevState,
-                    recipe: {
-                        recipe_id: res.data.recipe_id,
-                        recipe_name: res.data.recipe_name,
-                        popularity: res.data.popularity,
-                        instructions: res.data.instructions,
-                        ingredients: res.data.ingredients,
-                        img_url: res.data.img_url,
-                    },
+                    recipe: res.data.result,
                     loading: true,
                 };
             });
@@ -77,14 +68,17 @@ class Recipe extends Component {
                 this.handleRemoveFavorite
             );
         }
-        return <Aux><h1 className={classes.test}>lala</h1>{curRecipe}</Aux>;
+        return <Aux>{curRecipe}</Aux>;
     }
 }
 
 function recipe_info(key, recipe_data, addFun, removeFun) {
     let ingredients_info = recipe_data.ingredients.map((ingredient) => {
-        return ingredient_info(ingredient.name, ingredient);
+        return ingredient_info(ingredient.ingredient_name, ingredient);
     });
+    console.log("here222");
+    console.log(recipe_data);
+    console.log(recipe_data.recipe_name);
     return (
         <div key={key}>
             <table>
@@ -92,11 +86,14 @@ function recipe_info(key, recipe_data, addFun, removeFun) {
                     <tr>
                         <th>{recipe_data.recipe_id}</th>
                         <th>
-                            <img src={recipe_data.img_url} alt="lala" />
+                            <img
+                                src={recipe_data.image_url}
+                                className={classes.img}
+                                alt="lala"
+                            />
                         </th>
                         <th>{recipe_data.recipe_name}</th>
-                        <th>{recipe_data.popularity}</th>
-                        <th>{recipe_data.instructions}</th>
+                        <th>{recipe_data.instruction}</th>
                         <th>{ingredients_info}</th>
                         <th>
                             <button
@@ -129,9 +126,9 @@ function ingredient_info(key, ingredient) {
             <table>
                 <tbody>
                     <tr>
-                        <th>{ingredient.id}</th>
-                        <th>{ingredient.name}</th>
-                        <th>{ingredient.imageURL}</th>
+                        {/* <th>{ingredient.id}</th> */}
+                        <th>{ingredient.ingredient_name}</th>
+                        {/* <th>{ingredient.image_url}</th> */}
                     </tr>
                 </tbody>
             </table>

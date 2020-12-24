@@ -30,19 +30,27 @@ class SearchIngredient extends Component {
         ],
         currentQuery: "",
         loading: false,
+        success: false,
+        // err: "",
     };
 
     componentDidMount() {
-        const cors = "https://cors-anywhere.herokuapp.com/";
-        const url = "http://18.222.31.30/leftover_killer/get_recipes.php";
-        axios.get(`${cors}${url}`).then((res) => {
+        // const cors = "https://cors-anywhere.herokuapp.com/";
+        const url = "http://3.12.253.9:3000/recipe";
+
+        // `${cors}${url}`
+        axios.get(url).then((res) => {
             // http://18.222.31.30/leftover_killer/get_recipes.php
             // http://localhost/leftoverkiller2/get_recipes.php
-            const recipes = res.data.recipes;
-            console.log(recipes);
+            console.log(res);
+            console.log("here");
+
+            const recipes = res.data.result.recipes;
+
             this.setState({
                 allrecipe: recipes,
                 currentRecipe: recipes,
+                success: true,
                 loading: true,
             });
         });
@@ -78,6 +86,7 @@ class SearchIngredient extends Component {
     render() {
         let curRecipe = <Spinner />;
         if (this.state.loading) {
+            // if (this.state.success) {
             curRecipe = this.state.currentRecipe.map((val, idx) => {
                 return recipe_info(idx, val);
             });

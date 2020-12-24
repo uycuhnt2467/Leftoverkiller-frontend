@@ -15,15 +15,21 @@ import App from "./App";
 // import burgerBuilderReducer from "./store/reducers/burgerBuilder";
 // import orderReducer from "./store/reducers/order";
 // import authReducer from "./store/reducers/auth";
-import ingredientsReducer from "./store/reducers/ingredients";
-import favoriteReducer from "./store/reducers/favorite";
+// import ingredientsReducer from "./store/reducers/ingredients";
+// import favoriteReducer from "./store/reducers/favorite";
+import RootReducerr from "./store/root"
+
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const rootReducer = combineReducers({
-    ingredientsReducer: ingredientsReducer,
-    favoriteReducer: favoriteReducer,
-});
+// const rootReducer = combineReducers({
+//     ingredientsReducer: ingredientsReducer,
+//     favoriteReducer: favoriteReducer,
+//     authReducer: authReducer,
+// });
+
+const rootReducer = RootReducerr;
+
 
 const myReducer = persistReducer(
     {

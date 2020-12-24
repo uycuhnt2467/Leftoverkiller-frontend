@@ -30,20 +30,20 @@ class SearchIngredient extends Component {
     };
 
     componentDidMount() {
-        const cors = "https://cors-anywhere.herokuapp.com/";
+        // const cors = "https://cors-anywhere.herokuapp.com/";
         const url =
-            "http://18.222.31.30/leftover_killer/get_matching_recipes.php";
+            "http://3.12.253.9:3000/search";
         axios
-            .post(`${cors}${url}`, { ingredients: this.props.ingredient_list })
+            .post(url, { ingredients: this.props.ingredient_list })
             .then((res) => {
                 // http://18.222.31.30/leftover_killer/get_recipes.php
                 // http://localhost/leftoverkiller2/get_recipes.php
                 // console.log(res.data);
-                const recipes = res.data.recipes;
+                const recipes = res.data.result.recipes;
                 // console.log(recipes);
-                if (res.data.success) {
+                if (res.data.result.success) {
                     this.setState({
-                        success: res.data.success,
+                        success: res.data.result.success,
                         matching_recipe: recipes,
                         loading: true,
                     });

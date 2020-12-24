@@ -60,6 +60,7 @@ class Auth extends Component {
         // if (!this.props.buildingBurger && this.props.authRedirectPath !== "/") {
         //     this.props.onSetAuthRedirectPath();
         // }
+        // this.props.onAuthStart()
     }
 
     checkValidity(value, rules) {
@@ -159,7 +160,7 @@ class Auth extends Component {
 
         let authRedircet = null;
         if (this.props.isAuthenticated) {
-            authRedircet = <Redirect to={this.props.authRedirectPath} />;
+            // authRedircet = <Redirect to={this.props.authRedirectPath} />;
         }
 
         return (
@@ -178,23 +179,25 @@ class Auth extends Component {
     }
 }
 
-// const mapStateToProps = (state) => {
-//     return {
-//         loading: state.auth.loading,
-//         error: state.auth.error,
-//         isAuthenticated: state.auth.token !== null,
-//         buildingBurger: state.burgerBuilder.building,
-//         authRedirectPath: state.auth.authRedirectPath,
-//     };
-// };
+const mapStateToProps = (state) => {
+    return {
+        loading: state.authReducer.loading,
+        error: state.authReducer.error,
+        isAuthenticated: state.authReducer.token !== null,
+        authRedirectPath: state.authReducer.authRedirectPath,
+    };
+};
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         onAuth: (email, password, isSignup) =>
-//             dispatch(actions.auth(email, password, isSignup)),
-//         onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
-//     };
-// };
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onAuth: (username, email, password, isSignup) =>
+            dispatch(actions.auth(username, email, password, isSignup)),
+        // onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
+        onAuthStart: () => {
+            dispatch(actions.authStart());
+        },
+    };
+};
 
-// export default connect(mapStateToProps, mapDispatchToProps)(Auth);
-export default Auth;
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+// export default Auth;

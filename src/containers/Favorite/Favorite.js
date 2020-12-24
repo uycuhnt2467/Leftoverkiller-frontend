@@ -24,35 +24,22 @@ class Favroite extends Component {
     componentDidMount() {
         // favorite_recipe_id <array>
 
-        const cors = "https://cors-anywhere.herokuapp.com/";
-        const url =
-            "http://18.222.31.30/leftover_killer/get_recipe_details.php";
+        // const cors = "https://cors-anywhere.herokuapp.com/";
+        const url = "http://3.12.253.9:3000/recipe/";
         this.props.favorite_recipe_id.map((val) => {
-            return this.findRecipeFunction(cors, url, val);
+            return this.findRecipeFunction(url, val);
         });
     }
 
-    findRecipeFunction(cors, url, recipeId) {
-        var bodyFormData = new FormData();
-        bodyFormData.append("recipe_id", recipeId);
-        axios.post(`${cors}${url}`, bodyFormData).then((res) => {
-            this.setState((prevState) => {
-                return {
-                    success: res.data.success,
-                };
-            });
-            // const newInfo = {
-            //     recipe_id: res.data.recipe_id,
-            //     recipe_name: res.data.recipe_name,
-            //     img_url: res.data.img_url,
-            // }
+    findRecipeFunction(url, recipe_id) {
+        axios.get(`${url}${recipe_id}`).then((res) => {
             console.log(res.data);
             this.setState((prevState) => {
                 return {
                     ...prevState,
                     favorite_recipe_info: [
                         ...prevState.favorite_recipe_info,
-                        res.data,
+                        res.data.result,
                     ],
                     loading: true,
                 };
