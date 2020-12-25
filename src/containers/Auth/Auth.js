@@ -24,20 +24,20 @@ class Auth extends Component {
                 valid: false,
                 touched: false,
             },
-            email: {
-                elementType: "input",
-                elementConfig: {
-                    type: "email",
-                    placeholder: "Mail Address",
-                },
-                value: "",
-                validation: {
-                    required: true,
-                    isEmail: true,
-                },
-                valid: false,
-                touched: false,
-            },
+            // email: {
+            //     elementType: "input",
+            //     elementConfig: {
+            //         type: "email",
+            //         placeholder: "Mail Address",
+            //     },
+            //     value: "",
+            //     validation: {
+            //         required: true,
+            //         isEmail: true,
+            //     },
+            //     valid: false,
+            //     touched: false,
+            // },
             password: {
                 elementType: "input",
                 elementConfig: {
@@ -112,8 +112,11 @@ class Auth extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
+        console.log(this.state.controls.username.value);
+        console.log(this.state.controls.password.value);
         this.props.onAuth(
-            this.state.controls.email.value,
+            this.state.controls.username.value,
+            "",
             this.state.controls.password.value,
             this.state.isSignup
         );

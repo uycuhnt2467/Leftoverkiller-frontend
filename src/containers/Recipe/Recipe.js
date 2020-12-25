@@ -48,14 +48,15 @@ class Recipe extends Component {
 
     handleAddFavorite = (e) => {
         e.preventDefault();
+        console.log("check add value");
         console.log(e.target.value);
-        this.props.onFavoriteAdded(e.target.value);
+        this.props.onFavoriteAdded(e.target.value, this.props.token_id);
     };
 
     handleRemoveFavorite = (e) => {
         e.preventDefault();
         console.log(e.target.value);
-        this.props.onFavoriteRemoved(e.target.value);
+        this.props.onFavoriteRemoved(e.target.value, this.props.token_id);
     };
 
     render() {
@@ -139,15 +140,16 @@ function ingredient_info(key, ingredient) {
 const mapStateToProps = (state) => {
     return {
         favorite_recipe_id: state.favoriteReducer.favorite_recipe_id,
+        token_id: state.authReducer.token,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onFavoriteAdded: (recipe_id) =>
-            dispatch(actions.addFavorite(recipe_id)),
-        onFavoriteRemoved: (recipe_id) =>
-            dispatch(actions.removeFavorite(recipe_id)),
+        onFavoriteAdded: (recipe_id, token) =>
+            dispatch(actions.addFavoriteCheck(recipe_id, token)),
+        onFavoriteRemoved: (recipe_id, token) =>
+            dispatch(actions.removeFavoriteCheck(recipe_id, token)),
     };
 };
 

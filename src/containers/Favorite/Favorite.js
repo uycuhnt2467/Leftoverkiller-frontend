@@ -18,44 +18,48 @@ class Favroite extends Component {
             // }
         ],
         error: "",
-        loading: false,
+        // loading: false,
     };
 
     componentDidMount() {
         // favorite_recipe_id <array>
-
-        // const cors = "https://cors-anywhere.herokuapp.com/";
         const url = "http://3.12.253.9:3000/recipe/";
-        this.props.favorite_recipe_id.map((val) => {
-            return this.findRecipeFunction(url, val);
-        });
-    }
 
-    findRecipeFunction(url, recipe_id) {
-        axios.get(`${url}${recipe_id}`).then((res) => {
-            console.log(res.data);
-            this.setState((prevState) => {
-                return {
-                    ...prevState,
-                    favorite_recipe_info: [
-                        ...prevState.favorite_recipe_info,
-                        res.data.result,
-                    ],
-                    loading: true,
-                };
-            });
-            console.log(res.data);
+        this.props.onInitializeFavorite(this.props.token_id).then(()=>{
+            console.log("lala");
         });
+        console.log(this.props.favorite_recipe_id);
+
+        let promiseArray = this.props.favorite_recipe_id.map((val) =>
+            axios.get(`${url}${val}`)
+        );
+        // TODO: reloading problem
+        axios.all(promiseArray).then((result) => {
+            result.map((val) => {
+                return this.setState((prevState) => {
+                    return {
+                        ...prevState,
+                        favorite_recipe_info: [
+                            ...prevState.favorite_recipe_info,
+                            val.data.result,
+                        ],
+                    };
+                });
+            });
+        });
+        // this.setState({ loading: true });
     }
 
     render() {
         let favorite_recipe = <Spinner />;
-        if (this.state.loading) {
+        if (!this.props.loading) {
             favorite_recipe = this.state.favorite_recipe_info.map(
                 (val, idx) => {
                     return recipe_display(idx, val);
                 }
             );
+        } else if (this.state.favorite_recipe_info.length===0) {
+            favorite_recipe = <h1>No recipe</h1>
         }
         return (
             <Aux>
@@ -81,6 +85,8 @@ const recipe_display = (key, recipe) => {
 const mapStateToProps = (state) => {
     return {
         favorite_recipe_id: state.favoriteReducer.favorite_recipe_id,
+        token_id: state.authReducer.token,
+        loading: state.favoriteReducer.loading,
     };
 };
 
@@ -90,6 +96,9 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(actions.addFavorite(recipe_id)),
         onFavoriteRemoved: (recipe_id) =>
             dispatch(actions.removeFavorite(recipe_id)),
+        onInitializeFavorite: (token_id) => {
+            dispatch(actions.authFavorite(token_id));
+        },
     };
 };
 
