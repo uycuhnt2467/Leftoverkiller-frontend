@@ -32,17 +32,13 @@ class Recipe extends Component {
         axios.get(`${url}${recipeId}`).then((res) => {
             this.setState((prevState) => {
                 return {
-                    success: res.data.result.success,
-                };
-            });
-            this.setState((prevState) => {
-                return {
                     ...prevState,
+                    success: res.data.result.success,
                     recipe: res.data.result,
                     loading: true,
                 };
             });
-            console.log(res.data);
+            console.log(this.state);
         });
     }
 
@@ -77,9 +73,6 @@ function recipe_info(key, recipe_data, addFun, removeFun) {
     let ingredients_info = recipe_data.ingredients.map((ingredient) => {
         return ingredient_info(ingredient.ingredient_name, ingredient);
     });
-    console.log("here222");
-    console.log(recipe_data);
-    console.log(recipe_data.recipe_name);
     return (
         <div key={key}>
             <table>

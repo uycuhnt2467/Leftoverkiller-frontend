@@ -53,7 +53,7 @@ class Auth extends Component {
                 touched: false,
             },
         },
-        isSignup: true,
+        isSignup: false,
     };
 
     componentDidMount() {

@@ -18,51 +18,32 @@ class Favroite extends Component {
             // }
         ],
         error: "",
-        // loading: false,
     };
 
     componentDidMount() {
-        // favorite_recipe_id <array>
-        const url = "http://3.12.253.9:3000/recipe/";
-
-        this.props.onInitializeFavorite(this.props.token_id)
-        console.log(this.props.favorite_recipe_id);
-
-        let promiseArray = this.props.favorite_recipe_id.map((val) =>
-            axios.get(`${url}${val}`)
-        );
-        // TODO: reloading problem
-        axios.all(promiseArray).then((result) => {
-            result.map((val) => {
-                return this.setState((prevState) => {
-                    return {
-                        ...prevState,
-                        favorite_recipe_info: [
-                            ...prevState.favorite_recipe_info,
-                            val.data.result,
-                        ],
-                    };
-                });
-            });
-        });
-        // this.setState({ loading: true });
+        console.log(this.props.token_id);
+        this.props.onInitializeFavorite(this.props.token_id);
+        console.log("initilaize favorite");
+        console.log(this.props.favorite_recipe);
     }
 
     render() {
-        let favorite_recipe = <Spinner />;
+        let favorite_recipe_info = <Spinner />;
         if (!this.props.loading) {
-            favorite_recipe = this.state.favorite_recipe_info.map(
-                (val, idx) => {
-                    return recipe_display(idx, val);
-                }
-            );
-        } else if (this.state.favorite_recipe_info.length===0) {
-            favorite_recipe = <h1>No recipe</h1>
+            if (this.props.favorite_recipe.length === 0) {
+                favorite_recipe_info = <h1>No recipe</h1>;
+            } else {
+                favorite_recipe_info = this.props.favorite_recipe.map(
+                    (val, idx) => {
+                        return recipe_display(idx, val);
+                    }
+                );
+            }
         }
         return (
             <Aux>
                 <h1>Favorite Recipe</h1>
-                {favorite_recipe}
+                {favorite_recipe_info}
             </Aux>
         );
     }
@@ -82,7 +63,7 @@ const recipe_display = (key, recipe) => {
 
 const mapStateToProps = (state) => {
     return {
-        favorite_recipe_id: state.favoriteReducer.favorite_recipe_id,
+        favorite_recipe: state.favoriteReducer.favorite_recipe,
         token_id: state.authReducer.token,
         loading: state.favoriteReducer.loading,
     };
@@ -90,10 +71,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onFavoriteAdded: (recipe_id) =>
-            dispatch(actions.addFavorite(recipe_id)),
-        onFavoriteRemoved: (recipe_id) =>
-            dispatch(actions.removeFavorite(recipe_id)),
         onInitializeFavorite: (token_id) => {
             dispatch(actions.authFavorite(token_id));
         },

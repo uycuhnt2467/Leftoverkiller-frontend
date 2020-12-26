@@ -1,6 +1,7 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
 
+
 export const authStart = () => {
     return {
         type: actionTypes.AUTH_START,
@@ -64,14 +65,16 @@ export const auth = (username, email, password, isSignup) => {
                 console.log(authData);
 
                 const expirationDate = new Date(
-                    new Date().getTime() + 5 * 1000
+                    new Date().getTime() + 1000 * 1000
                 );
                 // localStorage.setItem("token", response.headers.token);
                 localStorage.setItem("expirationDate", expirationDate);
                 // localStorage.setItem("userId", response.data.localId);
                 // console.log(authData);
-                // console.log(response);
-                dispatch(authSuccess(response.headers.token));
+                console.log(response);
+                console.log("here auth");
+                console.log(response.data.result.token);
+                dispatch(authSuccess(response.data.result.token));
                 dispatch(checkAuthTimeout(1800));
             })
             .catch((err) => {

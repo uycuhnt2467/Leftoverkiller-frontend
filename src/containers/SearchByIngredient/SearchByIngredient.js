@@ -67,11 +67,6 @@ class SearchIngredient extends Component {
                 currentQuery: e.target.value,
             };
         });
-    };
-
-    handleSearchClick = (e) => {
-        e.preventDefault();
-
         let newIngredientsResult = this.state.allIngredients.filter((ing) => {
             return ing.ingredient_name
                 .toLowerCase()
@@ -85,6 +80,12 @@ class SearchIngredient extends Component {
             };
         });
     };
+
+    // handleSearchClick = (e) => {
+    //     e.preventDefault();
+
+        
+    // };
 
     render() {
         let curIngredient = <Spinner />;
@@ -126,9 +127,9 @@ class SearchIngredient extends Component {
                     placeholder="Any Ingredient"
                     value={this.state.currentQuery}
                 ></input>
-                <button type="submit" onClick={this.handleSearchClick}>
+                {/* <button type="submit" onClick={this.handleSearchClick}>
                     Search
-                </button>
+                </button> */}
                 {curIngredient}
             </Aux>
         );

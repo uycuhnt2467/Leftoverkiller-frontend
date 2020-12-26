@@ -64,11 +64,6 @@ class SearchIngredient extends Component {
                 currentQuery: e.target.value,
             };
         });
-    };
-
-    handleSearchClick = (e) => {
-        e.preventDefault();
-
         let newRecipeResult = this.state.allrecipe.filter((rec) => {
             return rec.recipe_name
                 .toLowerCase()
@@ -82,6 +77,23 @@ class SearchIngredient extends Component {
             };
         });
     };
+
+    // handleSearchClick = (e) => {
+    //     e.preventDefault();
+
+    //     let newRecipeResult = this.state.allrecipe.filter((rec) => {
+    //         return rec.recipe_name
+    //             .toLowerCase()
+    //             .includes(this.state.currentQuery);
+    //     });
+
+    //     this.setState((prevState) => {
+    //         return {
+    //             ...prevState,
+    //             currentRecipe: newRecipeResult,
+    //         };
+    //     });
+    // };
 
     render() {
         let curRecipe = <Spinner />;
@@ -101,9 +113,9 @@ class SearchIngredient extends Component {
                     placeholder="Any Recipe"
                     value={this.state.currentQuery}
                 ></input>
-                <button type="submit" onClick={this.handleSearchClick}>
+                {/* <button type="submit" onClick={this.handleSearchClick}>
                     Search
-                </button>
+                </button> */}
                 {curRecipe}
             </Aux>
         );

@@ -32,11 +32,13 @@ class Ingredient extends Component {
                     return {
                         ...prevState,
                         ingredient: res.data.result,
+
                         error: "",
                         loading: false,
                     };
                 });
             }
+            console.log(this.state);
         });
     }
 
