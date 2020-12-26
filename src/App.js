@@ -11,8 +11,9 @@ import Logout from "./containers/Auth/Logout/Logout";
 import SearchByReicipe from "./containers/SearchByRecipe/SearchByRecipe";
 import SearchByIngredient from "./containers/SearchByIngredient/SearchByIngredient";
 import Recipe from "./containers/Recipe/Recipe";
+import Ingredient from "./containers/Ingredient/Ingredient";
 import Favorite from "./containers/Favorite/Favorite";
-import Pantry from "./containers/Pantry/Pantry"
+import Pantry from "./containers/Pantry/Pantry";
 import classes from "./App.module.css";
 
 import * as actions from "./store/actions/index";
@@ -25,10 +26,17 @@ class App extends Component {
     render() {
         let routes = (
             <Switch>
-                <Route path="/searchByIngredient"  component={SearchByIngredient} />
+                <Route
+                    path="/searchByIngredient"
+                    component={SearchByIngredient}
+                />
                 <Route path="/" exact component={SearchByReicipe} />
                 <Route path="/pantry" component={Pantry} />
                 <Route path="/recipe/:recipeId" component={Recipe} />
+                <Route
+                    path="/ingredient/:ingredient_id"
+                    component={Ingredient}
+                />
                 <Route path="/favorite" component={Favorite} />
                 <Route path="/auth" component={Auth} />
                 <Redirect to="/" />
@@ -38,10 +46,17 @@ class App extends Component {
         if (this.props.isAuthenticated) {
             routes = (
                 <Switch>
-                    <Route path="/searchByIngredient"  component={SearchByIngredient} />
+                    <Route
+                        path="/searchByIngredient"
+                        component={SearchByIngredient}
+                    />
                     <Route path="/" exact component={SearchByReicipe} />
                     <Route path="/pantry" component={Pantry} />
                     <Route path="/recipe/:recipeId" component={Recipe} />
+                    <Route
+                        path="/ingredient/:ingredient_id"
+                        component={Ingredient}
+                    />
                     <Route path="/favorite" component={Favorite} />
                     <Route path="/logout" component={Logout} />
                     <Redirect to="/" />
