@@ -24,20 +24,20 @@ class Auth extends Component {
                 valid: false,
                 touched: false,
             },
-            // email: {
-            //     elementType: "input",
-            //     elementConfig: {
-            //         type: "email",
-            //         placeholder: "Mail Address",
-            //     },
-            //     value: "",
-            //     validation: {
-            //         required: true,
-            //         isEmail: true,
-            //     },
-            //     valid: false,
-            //     touched: false,
-            // },
+            email: {
+                elementType: "input",
+                elementConfig: {
+                    type: "email",
+                    placeholder: "Mail Address",
+                },
+                value: "",
+                validation: {
+                    required: true,
+                    isEmail: true,
+                },
+                valid: false,
+                touched: false,
+            },
             password: {
                 elementType: "input",
                 elementConfig: {
@@ -126,6 +126,7 @@ class Auth extends Component {
         this.setState((prevState) => {
             return { isSignup: !prevState.isSignup };
         });
+
     };
 
     render() {

@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 
 import * as actions from "../../../store/actions/index";
 
-class Logout extends Component {
+class Clear extends Component {
     componentDidMount() {
-        this.props.onLogout();
+        this.props.onClear();
     }
     render() {
         return <Redirect to="/"/>;
@@ -15,8 +15,8 @@ class Logout extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogout: () => dispatch(actions.clearStore()),
+        onClear: () => dispatch(actions.clearStore()),
     };
 };
 
-export default connect(null, mapDispatchToProps)(Logout);
+export default connect(null, mapDispatchToProps)(Clear);

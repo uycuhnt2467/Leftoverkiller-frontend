@@ -71,15 +71,15 @@ export const auth = (username, email, password, isSignup) => {
                 localStorage.setItem("expirationDate", expirationDate);
                 // localStorage.setItem("userId", response.data.localId);
                 // console.log(authData);
-                console.log(response);
-                console.log("here auth");
-                console.log(response.data.result.token);
+                // console.log(response);
+                // console.log("here auth");
+                // console.log(response.data.result.token);
                 dispatch(authSuccess(response.data.result.token));
                 dispatch(checkAuthTimeout(1800));
             })
             .catch((err) => {
                 console.log(err);
-                dispatch(authFail(err.response.data.error));
+                dispatch(authFail(err));
             });
     };
 };

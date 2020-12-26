@@ -14,6 +14,7 @@ import Recipe from "./containers/Recipe/Recipe";
 import Ingredient from "./containers/Ingredient/Ingredient";
 import Favorite from "./containers/Favorite/Favorite";
 import Pantry from "./containers/Pantry/Pantry";
+import Clear from "./containers/Auth/Clear/Clear"
 import classes from "./App.module.css";
 
 import * as actions from "./store/actions/index";
@@ -38,6 +39,7 @@ class App extends Component {
                     component={Ingredient}
                 />
                 <Route path="/favorite" component={Favorite} />
+                <Route path="/clear" component ={Clear}/>
                 <Route path="/auth" component={Auth} />
                 <Redirect to="/" />
             </Switch>

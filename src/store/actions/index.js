@@ -3,11 +3,13 @@ import { CLEAR_STORE } from "./actionTypes";
 export {
     initializePantry,
     addIngredient,
+    addIngredientCheck,
     removeIngredient,
-    // authPantry,
-    // fetchPantry,
+    removeIngredientCheck,
+    authPantry,
+    fetchPantry,
     fetchPantryEnd,
-    // clearPantry,
+    clearPantry,
 } from "./ingredients";
 
 export {

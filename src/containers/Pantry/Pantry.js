@@ -17,7 +17,7 @@ class Pantry extends Component {
     // }
     state = {
         // ingredient_list: [""],
-        matching_recipe: [
+        ingredients: [
             // {
             //     recipe_id: "",
             //     recipe_name: "",
@@ -26,33 +26,14 @@ class Pantry extends Component {
         ],
         currentQuery: "",
         success: false,
-        loading: false,
     };
 
     componentDidMount() {
         // const cors = "https://cors-anywhere.herokuapp.com/";
-        const url =
-            "http://3.12.253.9:3000/search";
-        axios
-            .post(url, { ingredients: this.props.ingredient_list })
-            .then((res) => {
-                // http://18.222.31.30/leftover_killer/get_recipes.php
-                // http://localhost/leftoverkiller2/get_recipes.php
-                // console.log(res.data);
-                const recipes = res.data.result.recipes;
-                // console.log(recipes);
-                if (res.data.result.success) {
-                    this.setState({
-                        success: res.data.result.success,
-                        matching_recipe: recipes,
-                        loading: true,
-                    });
-                } else {
-                    console.log("no return");
-                }
-
-                //
-            });
+        console.log(this.props.token_id);
+        this.props.onInitializePantry(this.props.token_id);
+        console.log("initilaize favorite");
+        console.log(this.props.ingredient_list);
     }
 
     handleIngredientInputChange = (e) => {
@@ -65,101 +46,83 @@ class Pantry extends Component {
         });
     };
 
-    handleAddClick = (e) => {
-        e.preventDefault();
-        this.props.onIngredientAdded(this.state.currentQuery);
-        this.setState((prevState) => ({
-            currentQuery: "",
-        }));
-    };
+    // handleAddClick = (e) => {
+    //     e.preventDefault();
+    //     this.props.onIngredientAdded(this.state.currentQuery);
+    //     this.setState((prevState) => ({
+    //         currentQuery: "",
+    //     }));
+    // };
 
-    handleRemoveClick = (e) => {
-        e.preventDefault();
-        this.props.onIngredientRemoved(e.target.value);
-    };
+    // handleRemoveClick = (e) => {
+    //     e.preventDefault();
+    //     this.props.onIngredientRemoved(e.target.value);
+    // };
 
-    handleSearchClick = (e) => {
-        e.preventDefault();
-        const cors = "https://cors-anywhere.herokuapp.com/";
-        const url =
-            "http://18.222.31.30/leftover_killer/get_matching_recipes.php";
-        axios
-            .post(`${cors}${url}`, { ingredients: this.props.ingredient_list })
-            .then((res) => {
-                // http://18.222.31.30/leftover_killer/get_recipes.php
-                // http://localhost/leftoverkiller2/get_recipes.php
-                // console.log(res.data);
-                const recipes = res.data.recipes;
-                // console.log(recipes);
-                if (res.data.success) {
-                    this.setState({
-                        success: res.data.success,
-                        matching_recipe: recipes,
-                    });
-                } else {
-                    console.log("no return");
-                }
+    // handleSearchClick = (e) => {
+    //     e.preventDefault();
+    //     const cors = "https://cors-anywhere.herokuapp.com/";
+    //     const url =
+    //         "http://18.222.31.30/leftover_killer/get_matching_recipes.php";
+    //     axios
+    //         .post(`${cors}${url}`, { ingredients: this.props.ingredient_list })
+    //         .then((res) => {
+    //             // http://18.222.31.30/leftover_killer/get_recipes.php
+    //             // http://localhost/leftoverkiller2/get_recipes.php
+    //             // console.log(res.data);
+    //             const recipes = res.data.recipes;
+    //             // console.log(recipes);
+    //             if (res.data.success) {
+    //                 this.setState({
+    //                     success: res.data.success,
+    //                     matching_recipe: recipes,
+    //                 });
+    //             } else {
+    //                 console.log("no return");
+    //             }
 
-                //
-            });
-    };
+    //             //
+    //         });
+    // };
 
     render() {
-        let cur_ingredient = this.props.ingredient_list.map((val, idx) => {
-            return ingredient_display(idx, val, this.handleRemoveClick);
-        });
+        let cur_ingredient = <Spinner />;
 
-        let found_recipe = this.state.matching_recipe.map((val, idx) => {
-            return recipe_display(idx, val);
-        });
+        if (!this.props.loading) {
+            if (this.props.ingredient_list.length === 0) {
+                cur_ingredient = <h1>No ingredient</h1>;
+            } else {
+                cur_ingredient = this.props.ingredient_list.map((val) => {
+                    return ingredient_display(val.ingredient_id, val);
+                });
+            }
+        }
 
         return (
             <Aux>
-                <input
-                    type="text"
-                    onChange={this.handleIngredientInputChange}
-                    name="curSearch"
-                    placeholder="Any Ingredient"
-                    value={this.state.currentQuery}
-                ></input>
-                <button type="submit" onClick={this.handleAddClick}>
-                    Add
-                </button>
-                <button type="submit" onClick={this.handleSearchClick}>
-                    Search
-                </button>
-
                 <h1>Current Ingredient</h1>
-                {cur_ingredient ? cur_ingredient : null}
-
-                <h1>Found Recipe</h1>
-
-                {found_recipe.length > 0 ? found_recipe : null}
+                {cur_ingredient}
             </Aux>
         );
     }
 }
 
-const ingredient_display = (key, ingredient_value, fun) => {
+const ingredient_display = (key, ingredient) => {
+    let link_string = "/ingredient/" + ingredient.ingredient_id;
+    const capitalize = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
     return (
         <ul key={key}>
-            <li>{ingredient_value}</li>
+            <li>{ingredient.ingredient_id}</li>
             <li>
-                <button type="submit" onClick={fun} value={ingredient_value}>
-                    Remove
-                </button>
+                {ingredient.ingredient_name
+                    .split(" ")
+                    .map(capitalize)
+                    .join(" ")}
             </li>
-        </ul>
-    );
-};
-
-const recipe_display = (key, recipe) => {
-    let link_string = "/recipe/" + recipe.recipe_id;
-    return (
-        <ul key={key}>
-            <li>{recipe.recipe_name}</li>
             <li>
-                <Link to={link_string}>recipe link</Link>
+                <Link to={link_string}>ingredient link</Link>
             </li>
         </ul>
     );
@@ -168,6 +131,8 @@ const recipe_display = (key, recipe) => {
 const mapStateToProps = (state) => {
     return {
         ingredient_list: state.ingredientsReducer.ingredients,
+        token_id: state.authReducer.token,
+        loading: state.ingredientsReducer.loading,
     };
 };
 
@@ -177,6 +142,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(actions.addIngredient(ingName)),
         onIngredientRemoved: (ingName) =>
             dispatch(actions.removeIngredient(ingName)),
+        onInitializePantry: (token_id) =>
+            dispatch(actions.authPantry(token_id)),
     };
 };
 

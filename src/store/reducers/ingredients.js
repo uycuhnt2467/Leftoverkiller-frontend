@@ -12,8 +12,13 @@ const initializePantry = (state, action) => {
 
 const addIngredients = (state, action) => {
     let updatedIngredients = [...state.ingredients];
-    if (!state.ingredients.includes(action.ingredientName)) {
-        updatedIngredients = [...state.ingredients, action.ingredientName];
+
+    let filter = updatedIngredients.filter(
+        (val) => val.ingredient_id === action.ingredient_info.ingredient_id
+    );
+    if (filter.length === 0) {
+        // console.log("add new");
+        updatedIngredients = [...updatedIngredients, action.ingredient_info];
     }
 
     return updateObject(state, {
@@ -23,16 +28,25 @@ const addIngredients = (state, action) => {
 
 const removeIngredient = (state, action) => {
     const updatedIngredients = state.ingredients.filter((val) => {
-        return val !== action.ingredientName;
+        return parseInt(val.ingredient_id) !== parseInt(action.ingredient_id);
     });
+    // console.log(updatedIngredients);
     return updateObject(state, {
         ingredients: updatedIngredients,
+        loading: false,
     });
 };
 
 const clearPantry = (state, action) => {
     return updateObject(state, {
         ingredients: [],
+        loading: false,
+    });
+};
+
+const fetchPantry = (state, action) => {
+    return updateObject(state, {
+        ingredients: action.ingredients,
         loading: false,
     });
 };
@@ -53,8 +67,10 @@ const reducer = (state = initialState, action) => {
             return initializePantry(state, action);
         case actionTypes.CLEAR_PANTRY:
             return clearPantry(state, action);
-        case actionTypes.FETCH_FAVORITE_END:
+        case actionTypes.FETCH_PANTRY_END:
             return fetchPantryEnd(state, action);
+        case actionTypes.FETCH_PANTRY:
+            return fetchPantry(state, action);
         default:
             return state;
     }

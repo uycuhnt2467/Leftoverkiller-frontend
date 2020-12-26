@@ -42,17 +42,17 @@ class Ingredient extends Component {
         });
     }
 
-    handleAddFavorite = (e) => {
+    handleAddPantry = (e) => {
         e.preventDefault();
         console.log("check add value");
         console.log(e.target.value);
-        this.props.onFavoriteAdded(e.target.value, this.props.token_id);
+        this.props.onPantryAdded(e.target.value, this.props.token_id);
     };
 
-    handleRemoveFavorite = (e) => {
+    handleRemovePantry = (e) => {
         e.preventDefault();
         console.log(e.target.value);
-        this.props.onFavoriteRemoved(e.target.value, this.props.token_id);
+        this.props.onPantryRemoved(e.target.value, this.props.token_id);
     };
 
     render() {
@@ -61,8 +61,8 @@ class Ingredient extends Component {
             curIngredient = ingredient_info(
                 0,
                 this.state.ingredient,
-                this.handleAddFavorite,
-                this.handleRemoveFavorite
+                this.handleAddPantry,
+                this.handleRemovePantry
             );
         }
         return <Aux>{curIngredient}</Aux>;
@@ -70,7 +70,7 @@ class Ingredient extends Component {
 }
 
 function ingredient_info(key, ingredient_data, addFun, removeFun) {
-    console.log(ingredient_data);
+    
     const recipe_infos = ingredient_data.recipes.map((recipe) => {
         return recipe_info(recipe.recipe_name, recipe);
     });
@@ -89,11 +89,11 @@ function ingredient_info(key, ingredient_data, addFun, removeFun) {
                         </th>
                         <th>{ingredient_data.ingredient_name}</th>
                         <th>{recipe_infos}</th>
-                        {/* <th>
+                        <th>
                             <button
                                 type="submit"
                                 onClick={addFun}
-                                value={recipe_data.recipe_id}
+                                value={ingredient_data.ingredient_id}
                             >
                                 AddFav
                             </button>
@@ -102,11 +102,11 @@ function ingredient_info(key, ingredient_data, addFun, removeFun) {
                             <button
                                 type="submit"
                                 onClick={removeFun}
-                                value={recipe_data.recipe_id}
+                                value={ingredient_data.ingredient_id}
                             >
                                 RemoveFav
                             </button>
-                        </th> */}
+                        </th>
                     </tr>
                 </tbody>
             </table>
@@ -139,10 +139,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onFavoriteAdded: (recipe_id, token) =>
-            dispatch(actions.addFavoriteCheck(recipe_id, token)),
-        onFavoriteRemoved: (recipe_id, token) =>
-            dispatch(actions.removeFavoriteCheck(recipe_id, token)),
+        onPantryAdded: (ingredient_id, token) =>
+            dispatch(actions.addIngredientCheck(ingredient_id, token)),
+        onPantryRemoved: (ingredient_id, token) =>
+            dispatch(actions.removeIngredientCheck(ingredient_id, token)),
     };
 };
 

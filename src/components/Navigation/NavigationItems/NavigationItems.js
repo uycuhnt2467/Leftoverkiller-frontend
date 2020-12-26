@@ -19,7 +19,9 @@ const navigationItems = (props) => (
         <NavigationItem link="/favorite" exact>
             Favorite
         </NavigationItem>
-
+        {!props.isAuthenticated ? (
+            <NavigationItem link="/clear">Clear</NavigationItem>
+        ) : null}
         {!props.isAuthenticated ? (
             <NavigationItem link="/auth">Authenticate</NavigationItem>
         ) : (

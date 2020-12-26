@@ -12,18 +12,18 @@ const initializeFavorite = (state, action) => {
 
 const addFavorite = (state, action) => {
     let updatedFavorite = [...state.favorite_recipe];
-    console.log("reducer add");
-    console.log(updatedFavorite);
-    console.log(action.recipe_info);
+    // console.log("reducer add");
+    // console.log(updatedFavorite);
+    // console.log(action.recipe_info);
     let filter = updatedFavorite.filter(
         (val) => val.recipe_id === action.recipe_info.recipe_id
     );
 
     if (filter.length === 0) {
-        console.log("add new");
+        // console.log("add new");
         updatedFavorite = [...updatedFavorite, action.recipe_info];
     }
-    console.log(updatedFavorite);
+    // console.log(updatedFavorite);
 
     return updateObject(state, {
         favorite_recipe: updatedFavorite,
@@ -35,7 +35,7 @@ const removeFavorite = (state, action) => {
     const updatedFavorite = state.favorite_recipe.filter((val) => {
         return parseInt(val.recipe_id) !== parseInt(action.recipeId);
     });
-    console.log(updatedFavorite);
+    // console.log(updatedFavorite);
     return updateObject(state, {
         favorite_recipe: updatedFavorite,
         loading: false,
@@ -50,7 +50,7 @@ const clearFavorite = (state, action) => {
 };
 
 const fetchFavorite = (state, action) => {
-    console.log("fetch");
+    // console.log("fetch");
     return updateObject(state, {
         favorite_recipe: action.favoriteArray,
         loading: false,

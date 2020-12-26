@@ -17,7 +17,6 @@ export const addFavorite = (recipe) => {
 
 export const addFavoriteCheck = (recipeId, token_id) => {
     return (dispatch) => {
- 
         const config = {
             headers: {
                 token: token_id,
@@ -28,27 +27,30 @@ export const addFavoriteCheck = (recipeId, token_id) => {
             recipe_id: recipeId,
         };
         let url = "http://3.12.253.9:3000/recipe/";
-        console.log(token_id);
-        axios.get(`${url}${recipeId}`).then((response) => {
-            const recipe = response.data.result;
-            console.log(recipe);
-            if (token_id !== null) {
-                url = "http://3.12.253.9:3000/favorite";
-                axios
-                    .post(url, qs.stringify(recipeData), config)
-                    .then((response) => {
-                        // console.log(response);
-                        console.log("inside add favorit");
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            } else {
-                dispatch(addFavorite(recipe));
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
+        // console.log(token_id);
+        axios
+            .get(`${url}${recipeId}`)
+            .then((response) => {
+                const recipe = response.data.result;
+                // console.log(recipe);
+                if (token_id !== null) {
+                    url = "http://3.12.253.9:3000/favorite";
+                    axios
+                        .post(url, qs.stringify(recipeData), config)
+                        .then((response) => {
+                            // console.log(response);
+                            // console.log("inside add favorit");
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                } else {
+                    dispatch(addFavorite(recipe));
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 };
 
@@ -78,8 +80,8 @@ export const removeFavoriteCheck = (recipeId, token_id) => {
                 .delete(url, config)
                 .then((response) => {
                     // console.log(recipeData);
-                    console.log("inside auth remove favorit");
-                    console.log(response.data.result);
+                    // console.log("inside auth remove favorit");
+                    // console.log(response.data.result);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -88,9 +90,7 @@ export const removeFavoriteCheck = (recipeId, token_id) => {
         } else {
             dispatch(removeFavorite(recipeId));
         }
-        
     };
-    
 };
 
 export const fetchFavorite = (tempFavoriteArray) => {
@@ -116,7 +116,7 @@ export const authFavorite = (tokenid) => {
     return (dispatch) => {
         dispatch(initializeFavorite());
         if (tokenid !== null) {
-            console.log("intilize favorite action");
+            // console.log("intilize favorite action");
             dispatch(clearFavorite());
             let config = {
                 headers: {
@@ -130,11 +130,11 @@ export const authFavorite = (tokenid) => {
                 .get(url, config)
                 .then((response) => {
                     // console.log(tokenid);
-                    console.log(response.data.result);
+                    // console.log(response.data.result);
                     const tempFavoriteArray = response.data.result.recipes.map(
                         (val) => val
                     );
-                    console.log(tempFavoriteArray);
+                    // console.log(tempFavoriteArray);
                     dispatch(fetchFavorite(tempFavoriteArray));
                 })
                 .catch((err) => {
