@@ -7,15 +7,19 @@ import NavigationItem from "./NavigationItem/NavigationItem";
 const navigationItems = (props) => (
     <ul className={classes.NavigationItems}>
         <NavigationItem link="/" exact>
-            Pantry
-        </NavigationItem>
-        <NavigationItem link="/searchByRecipe" exact>
             Recipe
         </NavigationItem>
+        <NavigationItem link="/searchByIngredient" exact>
+            Ingredient
+        </NavigationItem>
+        <NavigationItem link="/pantry" exact>
+            Pantry
+        </NavigationItem>
+
         <NavigationItem link="/favorite" exact>
             Favorite
         </NavigationItem>
-        
+
         {!props.isAuthenticated ? (
             <NavigationItem link="/auth">Authenticate</NavigationItem>
         ) : (

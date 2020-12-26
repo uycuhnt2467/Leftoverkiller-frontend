@@ -25,9 +25,7 @@ class Favroite extends Component {
         // favorite_recipe_id <array>
         const url = "http://3.12.253.9:3000/recipe/";
 
-        this.props.onInitializeFavorite(this.props.token_id).then(()=>{
-            console.log("lala");
-        });
+        this.props.onInitializeFavorite(this.props.token_id)
         console.log(this.props.favorite_recipe_id);
 
         let promiseArray = this.props.favorite_recipe_id.map((val) =>

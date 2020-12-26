@@ -12,6 +12,7 @@ import SearchByReicipe from "./containers/SearchByRecipe/SearchByRecipe";
 import SearchByIngredient from "./containers/SearchByIngredient/SearchByIngredient";
 import Recipe from "./containers/Recipe/Recipe";
 import Favorite from "./containers/Favorite/Favorite";
+import Pantry from "./containers/Pantry/Pantry"
 import classes from "./App.module.css";
 
 import * as actions from "./store/actions/index";
@@ -24,8 +25,9 @@ class App extends Component {
     render() {
         let routes = (
             <Switch>
-                <Route path="/" exact component={SearchByIngredient} />
-                <Route path="/searchByRecipe" component={SearchByReicipe} />
+                <Route path="/searchByIngredient"  component={SearchByIngredient} />
+                <Route path="/" exact component={SearchByReicipe} />
+                <Route path="/pantry" component={Pantry} />
                 <Route path="/recipe/:recipeId" component={Recipe} />
                 <Route path="/favorite" component={Favorite} />
                 <Route path="/auth" component={Auth} />
@@ -36,8 +38,9 @@ class App extends Component {
         if (this.props.isAuthenticated) {
             routes = (
                 <Switch>
-                    <Route path="/" exact component={SearchByIngredient} />
-                    <Route path="/searchByRecipe" component={SearchByReicipe} />
+                    <Route path="/searchByIngredient"  component={SearchByIngredient} />
+                    <Route path="/" exact component={SearchByReicipe} />
+                    <Route path="/pantry" component={Pantry} />
                     <Route path="/recipe/:recipeId" component={Recipe} />
                     <Route path="/favorite" component={Favorite} />
                     <Route path="/logout" component={Logout} />
