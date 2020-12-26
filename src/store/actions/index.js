@@ -1,6 +1,14 @@
-import { CLEAR_STORE } from './actionTypes';
+import { CLEAR_STORE } from "./actionTypes";
 
-export { addIngredient, removeIngredient } from "./ingredients";
+export {
+    initializePantry,
+    addIngredient,
+    removeIngredient,
+    // authPantry,
+    // fetchPantry,
+    fetchPantryEnd,
+    // clearPantry,
+} from "./ingredients";
 
 export {
     initializeFavorite,
@@ -22,6 +30,6 @@ export {
     authCheckState,
 } from "./auth";
 
-export const clearStore =  () => {
-    return {type: CLEAR_STORE}
-}
+export const clearStore = () => {
+    return { type: CLEAR_STORE };
+};
