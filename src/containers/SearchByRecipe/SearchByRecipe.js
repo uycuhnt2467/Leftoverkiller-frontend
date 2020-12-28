@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
+import RecipeDisplay from "./RecipeDisplay/RecipeDisplay";
 
 import Spinner from "../../components/UI/Spinner/Spinner";
+import classes from "./SearchByRecipe.module.css";
 // import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 // import * as actions from "../../store/actions/index";
 
@@ -99,40 +101,31 @@ class SearchIngredient extends Component {
         let curRecipe = <Spinner />;
         if (this.state.loading) {
             // if (this.state.success) {
-            curRecipe = this.state.currentRecipe.map((val, idx) => {
-                return recipe_info(idx, val);
+            curRecipe = this.state.currentRecipe.map((val) => {
+                return RecipeDisplay(val);
             });
         }
 
         return (
             <Aux>
-                <input
-                    type="text"
-                    onChange={this.handleSearchChange}
-                    name="curSearch"
-                    placeholder="Any Recipe"
-                    value={this.state.currentQuery}
-                ></input>
-                <button type="submit" onClick={this.handleSearchClick}>
-                    Search
-                </button>
-                {curRecipe}
+                <div>
+                    <div className={classes.inputDiv}>
+                        <input
+                            type="text"
+                            onChange={this.handleSearchChange}
+                            name="curSearch"
+                            placeholder="Any Recipe"
+                            value={this.state.currentQuery}
+                        ></input>
+                        <button type="submit" onClick={this.handleSearchClick}>
+                            Search
+                        </button>
+                    </div>
+                    <div className={classes.flex_container}>{curRecipe}</div>
+                </div>
             </Aux>
         );
     }
-}
-// define components
-function recipe_info(key, recipe_data) {
-    let link_string = "/recipe/" + recipe_data.recipe_id;
-    return (
-        <ul key={key}>
-            <li>{recipe_data.recipe_id}</li>
-            <li>{recipe_data.recipe_name}</li>
-            <li>
-                <Link to={link_string}>recipe link</Link>
-            </li>
-        </ul>
-    );
 }
 
 // const mapStateToProps = (state) => {

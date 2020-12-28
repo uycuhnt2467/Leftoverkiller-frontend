@@ -69,16 +69,16 @@ class App extends Component {
             );
         }
         return (
-            <div>
-                <Layout>{routes}</Layout>
-                <h5 className={classes.warning}>
+            <Layout>
+                <h3 className={classes.warning}>
                     This project is only for practicing. The recipe data are
-                    collected from{" "}
+                    collected from {" "}
                     <a href="https://www.allrecipes.com/">all recipe</a>. If the
                     data should be removed, please don't hesitate to email to
                     uycuhnt2467@gmail.com.
-                </h5>
-            </div>
+                </h3>
+                {routes}
+            </Layout>
         );
     }
 }

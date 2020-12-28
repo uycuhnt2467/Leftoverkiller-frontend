@@ -19,10 +19,17 @@
 
 .Logo {
     height: 80%;
+    
 }
 
 @media (max-width: 499px) {
     .DesktopOnly {
         display: none;
+    }
+}
+
+@media (min-width:500px) {
+    .Logo {
+        position: absolute
     }
 }
