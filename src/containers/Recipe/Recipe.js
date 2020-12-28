@@ -25,7 +25,7 @@ class Recipe extends Component {
 
     componentDidMount() {
         const { recipeId } = this.props.match.params;
-        console.log(recipeId);
+        // console.log(recipeId);
 
         let url = "http://3.12.253.9:3000/recipe/";
 
@@ -38,20 +38,20 @@ class Recipe extends Component {
                     loading: true,
                 };
             });
-            console.log(this.state);
+            // console.log(this.state);
         });
     }
 
     handleAddFavorite = (e) => {
         e.preventDefault();
-        console.log("check add value");
-        console.log(e.target.value);
+        // console.log("check add value");
+        // console.log(e.target.value);
         this.props.onFavoriteAdded(e.target.value, this.props.token_id);
     };
 
     handleRemoveFavorite = (e) => {
         e.preventDefault();
-        console.log(e.target.value);
+        // console.log(e.target.value);
         this.props.onFavoriteRemoved(e.target.value, this.props.token_id);
     };
 

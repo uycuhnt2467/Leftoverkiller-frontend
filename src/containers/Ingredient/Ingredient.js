@@ -22,7 +22,7 @@ class Ingredient extends Component {
 
     componentDidMount() {
         const { ingredient_id } = this.props.match.params;
-        console.log(ingredient_id);
+        // console.log(ingredient_id);
 
         let url = "http://3.12.253.9:3000/ingredient/";
 
@@ -38,20 +38,17 @@ class Ingredient extends Component {
                     };
                 });
             }
-            console.log(this.state);
+            // console.log(this.state);
         });
     }
 
     handleAddPantry = (e) => {
         e.preventDefault();
-        console.log("check add value");
-        console.log(e.target.value);
         this.props.onPantryAdded(e.target.value, this.props.token_id);
     };
 
     handleRemovePantry = (e) => {
         e.preventDefault();
-        console.log(e.target.value);
         this.props.onPantryRemoved(e.target.value, this.props.token_id);
     };
 

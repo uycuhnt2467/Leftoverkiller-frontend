@@ -30,10 +30,10 @@ class Pantry extends Component {
 
     componentDidMount() {
         // const cors = "https://cors-anywhere.herokuapp.com/";
-        console.log(this.props.token_id);
+        // console.log(this.props.token_id);
         this.props.onInitializePantry(this.props.token_id);
-        console.log("initilaize favorite");
-        console.log(this.props.ingredient_list);
+        // console.log("initilaize favorite");
+        // console.log(this.props.ingredient_list);
     }
 
     handleIngredientInputChange = (e) => {

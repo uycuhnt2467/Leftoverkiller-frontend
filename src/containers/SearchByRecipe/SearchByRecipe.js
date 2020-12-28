@@ -42,8 +42,8 @@ class SearchIngredient extends Component {
         axios.get(url).then((res) => {
             // http://18.222.31.30/leftover_killer/get_recipes.php
             // http://localhost/leftoverkiller2/get_recipes.php
-            console.log(res);
-            console.log("here");
+            // console.log(res);
+            // console.log("here");
 
             const recipes = res.data.result.recipes;
 
@@ -64,6 +64,23 @@ class SearchIngredient extends Component {
                 currentQuery: e.target.value,
             };
         });
+        // let newRecipeResult = this.state.allrecipe.filter((rec) => {
+        //     return rec.recipe_name
+        //         .toLowerCase()
+        //         .includes(this.state.currentQuery);
+        // });
+
+        // this.setState((prevState) => {
+        //     return {
+        //         ...prevState,
+        //         currentRecipe: newRecipeResult,
+        //     };
+        // });
+    };
+
+    handleSearchClick = (e) => {
+        e.preventDefault();
+
         let newRecipeResult = this.state.allrecipe.filter((rec) => {
             return rec.recipe_name
                 .toLowerCase()
@@ -77,23 +94,6 @@ class SearchIngredient extends Component {
             };
         });
     };
-
-    // handleSearchClick = (e) => {
-    //     e.preventDefault();
-
-    //     let newRecipeResult = this.state.allrecipe.filter((rec) => {
-    //         return rec.recipe_name
-    //             .toLowerCase()
-    //             .includes(this.state.currentQuery);
-    //     });
-
-    //     this.setState((prevState) => {
-    //         return {
-    //             ...prevState,
-    //             currentRecipe: newRecipeResult,
-    //         };
-    //     });
-    // };
 
     render() {
         let curRecipe = <Spinner />;
@@ -113,9 +113,9 @@ class SearchIngredient extends Component {
                     placeholder="Any Recipe"
                     value={this.state.currentQuery}
                 ></input>
-                {/* <button type="submit" onClick={this.handleSearchClick}>
+                <button type="submit" onClick={this.handleSearchClick}>
                     Search
-                </button> */}
+                </button>
                 {curRecipe}
             </Aux>
         );

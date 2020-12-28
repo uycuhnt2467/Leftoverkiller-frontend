@@ -116,7 +116,7 @@ export const authPantry = (tokenid) => {
     return (dispatch) => {
         dispatch(initializePantry());
         if (tokenid !== null) {
-            console.log("intilize pantry action");
+            // console.log("intilize pantry action");
             dispatch(clearPantry());
             let config = {
                 headers: {

@@ -99,9 +99,9 @@ class Auth extends Component {
 
     submitLoginHandler = (event) => {
         event.preventDefault();
-        console.log(this.state.controls.username.value);
+        // console.log(this.state.controls.username.value);
 
-        console.log(this.state.controls.password.value);
+        // console.log(this.state.controls.password.value);
         this.props.onAuth(
             this.state.controls.username.value,
             "",
@@ -112,9 +112,9 @@ class Auth extends Component {
 
     submitRegisterHandler = (event) => {
         event.preventDefault();
-        console.log(this.state.controls.username.value);
-        console.log(this.state.controls.email.value);
-        console.log(this.state.controls.password.value);
+        // console.log(this.state.controls.username.value);
+        // console.log(this.state.controls.email.value);
+        // console.log(this.state.controls.password.value);
         this.props.onAuth(
             this.state.controls.username.value,
             this.state.controls.email.value,
@@ -127,7 +127,7 @@ class Auth extends Component {
         this.setState((prevState) => {
             return { isSignup: !prevState.isSignup };
         });
-        console.log(this.state.isSignup);
+        // console.log(this.state.isSignup);
 
         if (!this.state.isSignup) {
             this.setState({

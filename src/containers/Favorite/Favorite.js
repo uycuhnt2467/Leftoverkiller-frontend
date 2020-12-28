@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import axios from "axios";
+// import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
 import Spinner from "../../components/UI/Spinner/Spinner";
@@ -21,10 +21,10 @@ class Favroite extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props.token_id);
+        // console.log(this.props.token_id);
         this.props.onInitializeFavorite(this.props.token_id);
-        console.log("initilaize favorite");
-        console.log(this.props.favorite_recipe);
+        // console.log("initilaize favorite");
+        // console.log(this.props.favorite_recipe);
     }
 
     render() {

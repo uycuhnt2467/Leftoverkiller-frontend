@@ -67,6 +67,10 @@ class SearchIngredient extends Component {
                 currentQuery: e.target.value,
             };
         });
+    };
+
+    handleSearchClick = (e) => {
+        e.preventDefault();
         let newIngredientsResult = this.state.allIngredients.filter((ing) => {
             return ing.ingredient_name
                 .toLowerCase()
@@ -81,12 +85,6 @@ class SearchIngredient extends Component {
         });
     };
 
-    // handleSearchClick = (e) => {
-    //     e.preventDefault();
-
-        
-    // };
-
     render() {
         let curIngredient = <Spinner />;
         if (!this.state.loading) {
@@ -94,7 +92,6 @@ class SearchIngredient extends Component {
                 return ingredient_info(idx, val);
             });
         }
-         
 
         return (
             // <Aux>
@@ -127,9 +124,9 @@ class SearchIngredient extends Component {
                     placeholder="Any Ingredient"
                     value={this.state.currentQuery}
                 ></input>
-                {/* <button type="submit" onClick={this.handleSearchClick}>
+                <button type="submit" onClick={this.handleSearchClick}>
                     Search
-                </button> */}
+                </button>
                 {curIngredient}
             </Aux>
         );
@@ -138,10 +135,18 @@ class SearchIngredient extends Component {
 // define components
 function ingredient_info(key, ingredient_data) {
     let link_string = "/ingredient/" + ingredient_data.ingredient_id;
+    const capitalize = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
     return (
         <ul key={key}>
             <li>{ingredient_data.ingredient_id}</li>
-            <li>{ingredient_data.ingredient_name}</li>
+            <li>
+                {ingredient_data.ingredient_name
+                    .split(" ")
+                    .map(capitalize)
+                    .join(" ")}
+            </li>
             <li>
                 <Link to={link_string}>ingredient link</Link>
             </li>
