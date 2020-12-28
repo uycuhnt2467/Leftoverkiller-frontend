@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
 
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
@@ -24,20 +24,7 @@ class Auth extends Component {
                 valid: false,
                 touched: false,
             },
-            email: {
-                elementType: "input",
-                elementConfig: {
-                    type: "email",
-                    placeholder: "Mail Address",
-                },
-                value: "",
-                validation: {
-                    required: true,
-                    isEmail: true,
-                },
-                valid: false,
-                touched: false,
-            },
+
             password: {
                 elementType: "input",
                 elementConfig: {
@@ -110,9 +97,10 @@ class Auth extends Component {
         this.setState({ controls: updatedControls });
     };
 
-    submitHandler = (event) => {
+    submitLoginHandler = (event) => {
         event.preventDefault();
         console.log(this.state.controls.username.value);
+
         console.log(this.state.controls.password.value);
         this.props.onAuth(
             this.state.controls.username.value,
@@ -122,11 +110,104 @@ class Auth extends Component {
         );
     };
 
+    submitRegisterHandler = (event) => {
+        event.preventDefault();
+        console.log(this.state.controls.username.value);
+        console.log(this.state.controls.email.value);
+        console.log(this.state.controls.password.value);
+        this.props.onAuth(
+            this.state.controls.username.value,
+            this.state.controls.email.value,
+            this.state.controls.password.value,
+            this.state.isSignup
+        );
+    };
+
     switchAuthModeHandler = () => {
         this.setState((prevState) => {
             return { isSignup: !prevState.isSignup };
         });
+        console.log(this.state.isSignup);
 
+        if (!this.state.isSignup) {
+            this.setState({
+                controls: {
+                    username: {
+                        elementType: "input",
+                        elementConfig: {
+                            type: "text",
+                            placeholder: "Username",
+                        },
+                        value: "",
+                        validation: {
+                            required: true,
+                        },
+                        valid: false,
+                        touched: false,
+                    },
+                    email: {
+                        elementType: "input",
+                        elementConfig: {
+                            type: "email",
+                            placeholder: "Mail Address",
+                        },
+                        value: "",
+                        validation: {
+                            required: true,
+                            isEmail: true,
+                        },
+                        valid: false,
+                        touched: false,
+                    },
+                    password: {
+                        elementType: "input",
+                        elementConfig: {
+                            type: "password",
+                            placeholder: "Password",
+                        },
+                        value: "",
+                        validation: {
+                            required: true,
+                            minLength: 6,
+                        },
+                        valid: false,
+                        touched: false,
+                    },
+                },
+            });
+        } else {
+            this.setState({
+                controls: {
+                    username: {
+                        elementType: "input",
+                        elementConfig: {
+                            type: "text",
+                            placeholder: "Username",
+                        },
+                        value: "",
+                        validation: {
+                            required: true,
+                        },
+                        valid: false,
+                        touched: false,
+                    },
+                    password: {
+                        elementType: "input",
+                        elementConfig: {
+                            type: "password",
+                            placeholder: "Password",
+                        },
+                        value: "",
+                        validation: {
+                            required: true,
+                            minLength: 6,
+                        },
+                        valid: false,
+                        touched: false,
+                    },
+                },
+            });
+        }
     };
 
     render() {
@@ -167,11 +248,28 @@ class Auth extends Component {
             // authRedircet = <Redirect to={this.props.authRedirectPath} />;
         }
 
+        let errorBackend = null;
+        if (this.props.backendError) {
+            errorBackend = (
+                <div>
+                    <p>{this.props.backendError.status}</p>
+                    <p>{this.props.backendError.msg}</p>
+                </div>
+            );
+        }
+
         return (
             <div className={classes.Auth}>
                 {authRedircet}
                 {errorMessage}
-                <form onSubmit={this.submitHandler}>
+                {errorBackend}
+                <form
+                    onSubmit={
+                        this.state.isSignup
+                            ? this.submitRegisterHandler
+                            : this.submitLoginHandler
+                    }
+                >
                     {form}
                     <Button btnType="Success">SUBMIT</Button>
                 </form>
@@ -189,6 +287,7 @@ const mapStateToProps = (state) => {
         error: state.authReducer.error,
         isAuthenticated: state.authReducer.token !== null,
         authRedirectPath: state.authReducer.authRedirectPath,
+        backendError: state.authReducer.errorBackend,
     };
 };
 

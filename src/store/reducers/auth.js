@@ -7,10 +7,15 @@ const initialState = {
     error: null,
     loading: false,
     authRedirectPath: "/",
+    errorBackend: null,
 };
 
 const authStart = (state, action) => {
-    return updateObject(state, { error: null, loading: false });
+    return updateObject(state, {
+        error: null,
+        loading: false,
+        errorBackend: null,
+    });
 };
 
 const authSuccess = (state, action) => {
@@ -18,6 +23,7 @@ const authSuccess = (state, action) => {
         token: action.idToken,
         error: null,
         loading: false,
+        errorBackend: null,
     });
 };
 
@@ -26,14 +32,19 @@ const authFail = (state, action) => {
 };
 
 const authLogout = (state, action) => {
-    return updateObject(state, { token: null});
+    return updateObject(state, { token: null });
 };
-
-
 
 // const setAuthRedirctPath = (state, action) => {
 //     return updateObject(state, { authRedirectPath: action.path });
 // };
+
+const authHandleCustomError = (state, action) => {
+    return updateObject(state, {
+        errorBackend: action.customError,
+        loading: false,
+    });
+};
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -47,6 +58,8 @@ const reducer = (state = initialState, action) => {
             return authLogout(state, action);
         // case actionTypes.SET_AUTH_REDIRECT_PATH:
         //     return setAuthRedirctPath(state, action);
+        case actionTypes.AUTH_HANDLE_CUSTOM_ERROR:
+            return authHandleCustomError(state, action);
         default:
             return state;
     }

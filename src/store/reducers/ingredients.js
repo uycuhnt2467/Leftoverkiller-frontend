@@ -3,6 +3,7 @@ import { updateObject } from "../utility";
 
 const initialState = {
     ingredients: [],
+    matchingRecipes:[],
     loading: false,
 };
 
@@ -40,6 +41,7 @@ const removeIngredient = (state, action) => {
 const clearPantry = (state, action) => {
     return updateObject(state, {
         ingredients: [],
+        matchingRecipes:[],
         loading: false,
     });
 };

@@ -32,7 +32,7 @@ class Ingredient extends Component {
                     return {
                         ...prevState,
                         ingredient: res.data.result,
-
+                        success: res.data.result.success,
                         error: "",
                         loading: false,
                     };
@@ -70,7 +70,6 @@ class Ingredient extends Component {
 }
 
 function ingredient_info(key, ingredient_data, addFun, removeFun) {
-    
     const recipe_infos = ingredient_data.recipes.map((recipe) => {
         return recipe_info(recipe.recipe_name, recipe);
     });

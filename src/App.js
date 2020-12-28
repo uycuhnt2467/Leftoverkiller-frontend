@@ -14,7 +14,8 @@ import Recipe from "./containers/Recipe/Recipe";
 import Ingredient from "./containers/Ingredient/Ingredient";
 import Favorite from "./containers/Favorite/Favorite";
 import Pantry from "./containers/Pantry/Pantry";
-import Clear from "./containers/Auth/Clear/Clear"
+import MatchingRecipe from "./containers/MatchingRecipe/MatchingRecipe";
+import Clear from "./containers/Auth/Clear/Clear";
 import classes from "./App.module.css";
 
 import * as actions from "./store/actions/index";
@@ -38,8 +39,9 @@ class App extends Component {
                     path="/ingredient/:ingredient_id"
                     component={Ingredient}
                 />
+                <Route path="/matching" component={MatchingRecipe} />
                 <Route path="/favorite" component={Favorite} />
-                <Route path="/clear" component ={Clear}/>
+                <Route path="/clear" component={Clear} />
                 <Route path="/auth" component={Auth} />
                 <Redirect to="/" />
             </Switch>
@@ -59,6 +61,7 @@ class App extends Component {
                         path="/ingredient/:ingredient_id"
                         component={Ingredient}
                     />
+                    <Route path="/matching" component={MatchingRecipe} />
                     <Route path="/favorite" component={Favorite} />
                     <Route path="/logout" component={Logout} />
                     <Redirect to="/" />

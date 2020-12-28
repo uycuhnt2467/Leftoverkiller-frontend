@@ -1,7 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
 
-
 export const authStart = () => {
     return {
         type: actionTypes.AUTH_START,
@@ -41,6 +40,13 @@ export const checkAuthTimeout = (expirationTime) => {
     };
 };
 
+export const authHandleCustomerError = (error) => {
+    return {
+        type: actionTypes.AUTH_HANDLE_CUSTOM_ERROR,
+        customError: error,
+    };
+};
+
 export const auth = (username, email, password, isSignup) => {
     return (dispatch) => {
         dispatch(authStart());
@@ -62,20 +68,22 @@ export const auth = (username, email, password, isSignup) => {
         axios
             .post(url, authData, config)
             .then((response) => {
-                console.log(authData);
+                if (response.data.result.err) {
+                    const error = {
+                        status: response.data.result.status,
+                        msg: response.data.result.err,
+                    };
+                    dispatch(authHandleCustomerError(error));
+                } else {
+                    const expirationDate = new Date(
+                        new Date().getTime() + 1000 * 1000
+                    );
+                    // localStorage.setItem("token", response.headers.token);
+                    localStorage.setItem("expirationDate", expirationDate);
 
-                const expirationDate = new Date(
-                    new Date().getTime() + 1000 * 1000
-                );
-                // localStorage.setItem("token", response.headers.token);
-                localStorage.setItem("expirationDate", expirationDate);
-                // localStorage.setItem("userId", response.data.localId);
-                // console.log(authData);
-                // console.log(response);
-                // console.log("here auth");
-                // console.log(response.data.result.token);
-                dispatch(authSuccess(response.data.result.token));
-                dispatch(checkAuthTimeout(1800));
+                    dispatch(authSuccess(response.data.result.token));
+                    dispatch(checkAuthTimeout(1800));
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -83,13 +91,6 @@ export const auth = (username, email, password, isSignup) => {
             });
     };
 };
-
-// export const setAuthRedirectPath = (path) => {
-//     return {
-//         type: actionTypes.SET_AUTH_REDIRECT_PATH,
-//         path: path,
-//     };
-// };
 
 export const authCheckState = () => {
     return (dispatch) => {

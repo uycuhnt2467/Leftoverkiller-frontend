@@ -30,6 +30,7 @@ export {
     authFail,
     logout,
     authCheckState,
+    authHandleCustomerError,
 } from "./auth";
 
 export const clearStore = () => {

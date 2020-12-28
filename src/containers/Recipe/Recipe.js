@@ -132,7 +132,6 @@ function ingredient_info(key, ingredient) {
 
 const mapStateToProps = (state) => {
     return {
-        favorite_recipe_id: state.favoriteReducer.favorite_recipe_id,
         token_id: state.authReducer.token,
     };
 };
