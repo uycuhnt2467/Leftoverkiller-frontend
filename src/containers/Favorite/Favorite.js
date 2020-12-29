@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 
 import Aux from "../../hoc/Auxx/Auxx";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import FavoriteRecipeDisplay from "./FavoriteRecipeDisplay/FavoriteRecipeDisplay";
+import classes from "./Favorite.module.css";
 import * as actions from "../../store/actions/index";
 
 class Favroite extends Component {
@@ -31,35 +33,40 @@ class Favroite extends Component {
         let favorite_recipe_info = <Spinner />;
         if (!this.props.loading) {
             if (this.props.favorite_recipe.length === 0) {
-                favorite_recipe_info = <h1>No recipe</h1>;
-            } else {
-                favorite_recipe_info = this.props.favorite_recipe.map(
-                    (val, idx) => {
-                        return recipe_display(idx, val);
-                    }
+                favorite_recipe_info = (
+                    <h1 className={classes.noItemTitle}>
+                        No recipe in the favorite list, add recipe{" "}
+                        <Link to="/">here</Link>.
+                    </h1>
                 );
+            } else {
+                favorite_recipe_info = this.props.favorite_recipe.map((val) => {
+                    return FavoriteRecipeDisplay(val);
+                });
             }
         }
         return (
             <Aux>
-                <h1>Favorite Recipe</h1>
-                {favorite_recipe_info}
+                <div className={classes.inputDiv}>
+                    <h1 className={classes.title}>Favorite Recipe</h1>
+                    <input
+                        type="text"
+                        // onChange={this.handleSearchChange}
+                        name="curSearch"
+                        placeholder="Any Recipe"
+                        value={this.state.currentQuery}
+                    ></input>
+                    <button type="submit" onClick={this.handleSearchClick}>
+                        Search
+                    </button>
+                </div>
+                <div className={classes.flex_container}>
+                    {favorite_recipe_info}
+                </div>
             </Aux>
         );
     }
 }
-
-const recipe_display = (key, recipe) => {
-    let link_string = "/recipe/" + recipe.recipe_id;
-    return (
-        <ul key={key}>
-            <li>{recipe.recipe_name}</li>
-            <li>
-                <Link to={link_string}>recipe link</Link>
-            </li>
-        </ul>
-    );
-};
 
 const mapStateToProps = (state) => {
     return {

@@ -110,6 +110,7 @@ class SearchIngredient extends Component {
             <Aux>
                 <div>
                     <div className={classes.inputDiv}>
+                        <h1>Find Recipe and Add into Favorite</h1>
                         <input
                             type="text"
                             onChange={this.handleSearchChange}

@@ -4,7 +4,8 @@ import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
 import Spinner from "../../components/UI/Spinner/Spinner";
-import * as actions from "../../store/actions/index";
+import MatchingRecipeDisplay from "./MatchingRecipeDisplay/MatchingRecipeDisplay";
+// import * as actions from "../../store/actions/index";
 
 import classes from "./MatchingRecipe.module.css";
 
@@ -58,77 +59,32 @@ class MatchingRecipe extends Component {
         if (!this.state.loading) {
             if (this.state.recipes.length > 0) {
                 curRecipe = this.state.recipes.map((val) =>
-                    recipe_info(
-                        val.recipe_id,
-                        val
-                        // this.handleAddFavorite,
-                        // this.handleRemoveFavorite
-                    )
+                    MatchingRecipeDisplay(val)
                 );
             } else {
                 curRecipe = <p>No matching recipe</p>;
             }
         }
-        return <Aux>{curRecipe}</Aux>;
+        return (
+            <Aux>
+                {" "}
+                <div className={classes.inputDiv}>
+                    <h1 className={classes.title}>Matching Recipe</h1>
+                    <input
+                        type="text"
+                        // onChange={this.handleSearchChange}
+                        name="curSearch"
+                        placeholder="Any Recipe"
+                        value={this.state.currentQuery}
+                    ></input>
+                    <button type="submit" onClick={this.handleSearchClick}>
+                        Search
+                    </button>
+                </div>
+                <div className={classes.flex_container}>{curRecipe}</div>
+            </Aux>
+        );
     }
-}
-
-function recipe_info(key, recipe_data) {
-    return (
-        <div key={key}>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>{recipe_data.recipe_id}</th>
-                        <th>
-                            <img
-                                src={recipe_data.image_url}
-                                className={classes.img}
-                                alt="lala"
-                            />
-                        </th>
-                        <th>{recipe_data.recipe_name}</th>
-                        {/* <th>{recipe_data.instruction}</th> */}
-                        {/* <th>{ingredients_info}</th> */}
-                        {/* <th>
-                            <button
-                                type="submit"
-                                onClick={addFun}
-                                value={recipe_data.recipe_id}
-                            >
-                                AddFav
-                            </button>
-                        </th>
-                        <th>
-                            <button
-                                type="submit"
-                                onClick={removeFun}
-                                value={recipe_data.recipe_id}
-                            >
-                                RemoveFav
-                            </button>
-                        </th> */}
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    );
-}
-
-function ingredient_info(key, ingredient) {
-    return (
-        <div key={key}>
-            <table>
-                <tbody>
-                    <tr>
-                        {/* <th>{ingredient.id}</th> */}
-                        <th>{ingredient.ingredient_name}</th>
-                        {/* <th>{ingredient.image_url}</th> */}
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    );
 }
 
 const mapStateToProps = (state) => {

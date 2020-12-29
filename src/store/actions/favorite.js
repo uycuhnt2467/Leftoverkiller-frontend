@@ -132,7 +132,11 @@ export const authFavorite = (tokenid) => {
                     // console.log(tokenid);
                     // console.log(response.data.result);
                     const tempFavoriteArray = response.data.result.recipes.map(
-                        (val) => val
+                        (val) => ({
+                            recipe_id: val.recipe_id,
+                            recipe_name: val.recipe_name,
+                            image_url: val.img_url,
+                        })
                     );
                     // console.log(tempFavoriteArray);
                     dispatch(fetchFavorite(tempFavoriteArray));

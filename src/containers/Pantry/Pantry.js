@@ -1,21 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter, Redirect} from "react-router-dom";
 
 import Aux from "../../hoc/Auxx/Auxx";
 
-// import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Spinner from "../../components/UI/Spinner/Spinner";
 // import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import PantryIngredientDisplay from "./PantryIngredientDisplay/PantryIngredientDisplay";
+import classes from "./Pantry.module.css";
 import * as actions from "../../store/actions/index";
-import axios from "axios";
 
 class Pantry extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {...}
-    // }
     state = {
+        redirect:false,
         // ingredient_list: [""],
         ingredients: [
             // {
@@ -45,6 +42,17 @@ class Pantry extends Component {
             };
         });
     };
+
+    redirectHandler = () => {
+        this.setState({ redirect: true })
+        this.renderRedirect();
+    }
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to='/matching' />
+        }
+    }
+  
 
     // handleAddClick = (e) => {
     //     e.preventDefault();
@@ -90,43 +98,44 @@ class Pantry extends Component {
 
         if (!this.props.loading) {
             if (this.props.ingredient_list.length === 0) {
-                cur_ingredient = <h1>No ingredient</h1>;
+                cur_ingredient = (
+                    <h1 className={classes.noItemTitle}>
+                        No ingredient in the pantry, add ingredient{" "}
+                        <Link to="/searchbyingredient">here</Link>.
+                    </h1>
+                );
             } else {
                 cur_ingredient = this.props.ingredient_list.map((val) => {
-                    return ingredient_display(val.ingredient_id, val);
+                    return PantryIngredientDisplay(val);
                 });
             }
         }
 
         return (
             <Aux>
-                <h1>Current Ingredient</h1>
-                {cur_ingredient}
+                <div className={classes.inputDiv}>
+                    <h1>Ingredient in Pantry</h1>
+                    <input
+                        type="text"
+                        onChange={this.handleIngredientInputChange}
+                        name="curSearch"
+                        placeholder="Any Ingredient"
+                        value={this.state.currentQuery}
+                    ></input>
+                    <button type="submit" onClick={this.handleSearchClick}>
+                        Search
+                    </button>
+                    <button type="submit" onClick={this.redirectHandler}>
+                        Matching
+                    </button>
+                    {this.renderRedirect()}
+                </div>
+
+                <div className={classes.flex_container}>{cur_ingredient}</div>
             </Aux>
         );
     }
 }
-
-const ingredient_display = (key, ingredient) => {
-    let link_string = "/ingredient/" + ingredient.ingredient_id;
-    const capitalize = (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    };
-    return (
-        <ul key={key}>
-            <li>{ingredient.ingredient_id}</li>
-            <li>
-                {ingredient.ingredient_name
-                    .split(" ")
-                    .map(capitalize)
-                    .join(" ")}
-            </li>
-            <li>
-                <Link to={link_string}>ingredient link</Link>
-            </li>
-        </ul>
-    );
-};
 
 const mapStateToProps = (state) => {
     return {
@@ -151,4 +160,4 @@ const mapDispatchToProps = (dispatch) => {
 //     mapStateToProps,
 //     mapDispatchToProps
 // )(withErrorHandler(BurgerBuilder, axios));
-export default connect(mapStateToProps, mapDispatchToProps)(Pantry);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Pantry));

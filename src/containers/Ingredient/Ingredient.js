@@ -5,6 +5,7 @@ import axios from "axios";
 import Aux from "../../hoc/Auxx/Auxx";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import * as actions from "../../store/actions/index";
+import IngredeintDetail from "./IngredientDetail/IngredientDetail";
 
 import classes from "./Ingredient.module.css";
 
@@ -18,11 +19,21 @@ class Ingredient extends Component {
         // recipe: [],
         error: "",
         loading: true,
+        inPantry: false,
     };
 
     componentDidMount() {
+        this.props.onInitializePantry(this.props.token_id);
         const { ingredient_id } = this.props.match.params;
         // console.log(ingredient_id);
+        const inPantryCheck = this.props.ingredient_list.filter(
+            (val) => parseInt(val.ingredient_id) === parseInt(ingredient_id)
+        );
+        if (inPantryCheck.length === 0) {
+            this.setState({ inPantry: false });
+        } else {
+            this.setState({ inPantry: true });
+        }
 
         let url = "http://3.12.253.9:3000/ingredient/";
 
@@ -38,107 +49,66 @@ class Ingredient extends Component {
                     };
                 });
             }
-            // console.log(this.state);
         });
     }
 
     handleAddPantry = (e) => {
+        // console.log(e.target.value, this.props.token_id);
         e.preventDefault();
         this.props.onPantryAdded(e.target.value, this.props.token_id);
+        this.setState({ inPantry: true });
     };
 
     handleRemovePantry = (e) => {
         e.preventDefault();
         this.props.onPantryRemoved(e.target.value, this.props.token_id);
+        this.setState({ inPantry: false });
     };
 
     render() {
         let curIngredient = <Spinner />;
         if (!this.state.loading) {
-            curIngredient = ingredient_info(
-                0,
-                this.state.ingredient,
-                this.handleAddPantry,
-                this.handleRemovePantry
-            );
+            if (!this.state.inPantry) {
+                curIngredient = (
+                    <IngredeintDetail
+                        ingredientInfo={this.state.ingredient}
+                        clickedFunction={this.handleAddPantry}
+                        pantryChecked={this.state.inPantry}
+                    />
+                );
+            } else {
+                curIngredient = (
+                    <IngredeintDetail
+                        ingredientInfo={this.state.ingredient}
+                        clickedFunction={this.handleRemovePantry}
+                        pantryChecked={this.state.inPantry}
+                    />
+                );
+            }
         }
-        return <Aux>{curIngredient}</Aux>;
+        return (
+            <Aux>
+                <div className={classes.flex_container}>{curIngredient}</div>
+            </Aux>
+        );
     }
-}
-
-function ingredient_info(key, ingredient_data, addFun, removeFun) {
-    const recipe_infos = ingredient_data.recipes.map((recipe) => {
-        return recipe_info(recipe.recipe_name, recipe);
-    });
-    return (
-        <div key={key}>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>{ingredient_data.ingredient_id}</th>
-                        <th>
-                            <img
-                                src={ingredient_data.image_url}
-                                className={classes.img}
-                                alt="lala"
-                            />
-                        </th>
-                        <th>{ingredient_data.ingredient_name}</th>
-                        <th>{recipe_infos}</th>
-                        <th>
-                            <button
-                                type="submit"
-                                onClick={addFun}
-                                value={ingredient_data.ingredient_id}
-                            >
-                                AddFav
-                            </button>
-                        </th>
-                        <th>
-                            <button
-                                type="submit"
-                                onClick={removeFun}
-                                value={ingredient_data.ingredient_id}
-                            >
-                                RemoveFav
-                            </button>
-                        </th>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    );
-}
-
-function recipe_info(key, recipe) {
-    return (
-        <div key={key}>
-            <table>
-                <tbody>
-                    <tr>
-                        {/* <th>{ingredient.id}</th> */}
-                        <th>{recipe.recipe_name}</th>
-                        {/* <th>{ingredient.image_url}</th> */}
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    );
 }
 
 const mapStateToProps = (state) => {
     return {
-        favorite_recipe_id: state.favoriteReducer.favorite_recipe_id,
+        ingredient_list: state.ingredientsReducer.ingredients,
         token_id: state.authReducer.token,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onPantryAdded: (ingredient_id, token) =>
-            dispatch(actions.addIngredientCheck(ingredient_id, token)),
-        onPantryRemoved: (ingredient_id, token) =>
-            dispatch(actions.removeIngredientCheck(ingredient_id, token)),
+        onInitializePantry: (token_id) =>
+            dispatch(actions.authPantry(token_id)),
+        onPantryAdded: (ingredient_id, token_id) =>
+            dispatch(actions.addIngredientCheck(ingredient_id, token_id)),
+        onPantryRemoved: (ingredient_id, token_id) =>
+            dispatch(actions.removeIngredientCheck(ingredient_id, token_id)),
     };
 };
 

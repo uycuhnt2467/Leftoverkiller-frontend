@@ -1,0 +1,32 @@
+.p {
+    text-align: center;
+}
+
+.imgSize {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgRe:hover {
+    transform: scale(1.15);
+}
+
+/* @media (min-width: 500px) { */
+.item {
+    max-height: 200px;
+    max-width: 200px;
+    width: 100%;
+}
+
+.imgRe {
+    height: 100px;
+    width: 100px;
+    transition: transform .2s;
+    border-radius: 20px;
+}
+
+.imgSize {
+    max-width: 200px;
+    max-height: 200px;
+}

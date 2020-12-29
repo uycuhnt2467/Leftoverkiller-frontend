@@ -1,0 +1,50 @@
+.item {
+    max-height: 400px;
+    max-width: 600px;
+}
+
+
+.p {
+    text-align: center;
+}
+
+.imgSize {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    max-height: 400px;
+}
+.imgRe {
+    height: 300px;
+    width: 300px;
+    transition: transform .2s;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .imgRe:hover {
+    transform: scale(1.15);
+} */
+
+/* @media (min-width: 500px) { */
+
+
+
+.itemName{
+   text-align: center;
+}
+
+.itemButtonDiv {
+    max-width: 100%;
+    /* width: 100%; */
+    /* justify-content: center;
+    align-items: center; */
+    text-align: center;
+}
+
+.itemButton {
+    
+    justify-content: right;
+}

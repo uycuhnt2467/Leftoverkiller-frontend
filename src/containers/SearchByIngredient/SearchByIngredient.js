@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+
+import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
-
-// import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Spinner from "../../components/UI/Spinner/Spinner";
 // import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import * as actions from "../../store/actions/index";
-import axios from "axios";
+import ingredientDisplay from "./IngredientDisplay/IngredientDisplay";
+import classes from "./SearchByIngredient.module.css";
 
 class SearchIngredient extends Component {
     // constructor(props) {
@@ -88,71 +87,32 @@ class SearchIngredient extends Component {
     render() {
         let curIngredient = <Spinner />;
         if (!this.state.loading) {
-            curIngredient = this.state.currentIngredients.map((val, idx) => {
-                return ingredient_info(idx, val);
+            curIngredient = this.state.currentIngredients.map((val) => {
+                return ingredientDisplay(val);
             });
         }
 
         return (
-            // <Aux>
-            //     <input
-            //         type="text"
-            //         onChange={this.handleIngredientInputChange}
-            //         name="curSearch"
-            //         placeholder="Any Ingredient"
-            //         value={this.state.currentQuery}
-            //     ></input>
-            //     <button type="submit" onClick={this.handleAddClick}>
-            //         Add
-            //     </button>
-            //     <button type="submit" onClick={this.handleSearchClick}>
-            //         Search
-            //     </button>
-
-            //     <h1>Current Ingredient</h1>
-            //     {cur_ingredient ? cur_ingredient : null}
-
-            //     <h1>Found Recipe</h1>
-
-            //     {found_recipe.length > 0 ? found_recipe : null}
-            // </Aux>
             <Aux>
-                <input
-                    type="text"
-                    onChange={this.handleIngredientInputChange}
-                    name="curSearch"
-                    placeholder="Any Ingredient"
-                    value={this.state.currentQuery}
-                ></input>
-                <button type="submit" onClick={this.handleSearchClick}>
-                    Search
-                </button>
-                {curIngredient}
+                <div className={classes.inputDiv}>
+                    <h1>Find Ingredient and Add into Pantry</h1>
+                    <input
+                        type="text"
+                        onChange={this.handleIngredientInputChange}
+                        name="curSearch"
+                        placeholder="Any Ingredient"
+                        value={this.state.currentQuery}
+                    ></input>
+                    <button type="submit" onClick={this.handleSearchClick}>
+                        Search
+                    </button>
+                </div>
+                <div className={classes.flex_container}>{curIngredient}</div>
             </Aux>
         );
     }
 }
 // define components
-function ingredient_info(key, ingredient_data) {
-    let link_string = "/ingredient/" + ingredient_data.ingredient_id;
-    const capitalize = (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    };
-    return (
-        <ul key={key}>
-            <li>{ingredient_data.ingredient_id}</li>
-            <li>
-                {ingredient_data.ingredient_name
-                    .split(" ")
-                    .map(capitalize)
-                    .join(" ")}
-            </li>
-            <li>
-                <Link to={link_string}>ingredient link</Link>
-            </li>
-        </ul>
-    );
-}
 
 const mapStateToProps = (state) => {
     return {
