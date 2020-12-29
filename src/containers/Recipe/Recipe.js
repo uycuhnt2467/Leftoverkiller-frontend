@@ -5,7 +5,7 @@ import axios from "axios";
 import Aux from "../../hoc/Auxx/Auxx";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import * as actions from "../../store/actions/index";
-
+import RecipeDetail from "./RecipeDetail/RecipeDetail";
 import classes from "./Recipe.module.css";
 
 class Recipe extends Component {
@@ -20,12 +20,22 @@ class Recipe extends Component {
         //     ingredients: [],
         // },
         error: "",
-        loading: false,
+        loading: true,
+        inFavorite: false,
     };
 
     componentDidMount() {
         const { recipeId } = this.props.match.params;
-        // console.log(recipeId);
+        this.props.onInitializeFavorite(this.props.token_id);
+
+        const inFavoriteCheck = this.props.favorite_recipe.filter(
+            (val) => parseInt(val.recipe_id) === parseInt(recipeId)
+        );
+        if (inFavoriteCheck.length === 0) {
+            this.setState({ inFavorite: false });
+        } else {
+            this.setState({ inFavorite: true });
+        }
 
         let url = "http://3.12.253.9:3000/recipe/";
 
@@ -35,7 +45,7 @@ class Recipe extends Component {
                     ...prevState,
                     success: res.data.result.success,
                     recipe: res.data.result,
-                    loading: true,
+                    loading: false,
                 };
             });
             // console.log(this.state);
@@ -44,104 +54,68 @@ class Recipe extends Component {
 
     handleAddFavorite = (e) => {
         e.preventDefault();
-        // console.log("check add value");
-        // console.log(e.target.value);
         this.props.onFavoriteAdded(e.target.value, this.props.token_id);
+        this.setState({ inFavorite: true });
     };
 
     handleRemoveFavorite = (e) => {
         e.preventDefault();
         // console.log(e.target.value);
         this.props.onFavoriteRemoved(e.target.value, this.props.token_id);
+        this.setState({ inFavorite: false });
     };
 
     render() {
         let curRecipe = <Spinner />;
-        if (this.state.loading) {
-            curRecipe = recipe_info(
-                0,
-                this.state.recipe,
-                this.handleAddFavorite,
-                this.handleRemoveFavorite
-            );
+        if (!this.state.loading) {
+            // curRecipe = recipe_info(
+            //     0,
+            //     this.state.recipe,
+            //     this.handleAddFavorite,
+            //     this.handleRemoveFavorite
+            // );
+            if (!this.state.inFavorite) {
+                curRecipe = (
+                    <RecipeDetail
+                        recipeInfo={this.state.recipe}
+                        clickedFunction={this.handleAddFavorite}
+                        favoriteChecked={this.state.inFavorite}
+                    />
+                );
+            } else {
+                curRecipe = (
+                    <RecipeDetail
+                        recipeInfo={this.state.recipe}
+                        clickedFunction={this.handleRemoveFavorite}
+                        favoriteChecked={this.state.inFavorite}
+                    />
+                );
+            }
         }
-        return <Aux>{curRecipe}</Aux>;
+        return (
+            <Aux>
+                <div className={classes.flex_container}>{curRecipe}</div>
+            </Aux>
+        );
     }
-}
-
-function recipe_info(key, recipe_data, addFun, removeFun) {
-    let ingredients_info = recipe_data.ingredients.map((ingredient) => {
-        return ingredient_info(ingredient.ingredient_name, ingredient);
-    });
-    return (
-        <div key={key}>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>{recipe_data.recipe_id}</th>
-                        <th>
-                            <img
-                                src={recipe_data.image_url}
-                                className={classes.img}
-                                alt="lala"
-                            />
-                        </th>
-                        <th>{recipe_data.recipe_name}</th>
-                        <th>{recipe_data.instruction}</th>
-                        <th>{ingredients_info}</th>
-                        <th>
-                            <button
-                                type="submit"
-                                onClick={addFun}
-                                value={recipe_data.recipe_id}
-                            >
-                                AddFav
-                            </button>
-                        </th>
-                        <th>
-                            <button
-                                type="submit"
-                                onClick={removeFun}
-                                value={recipe_data.recipe_id}
-                            >
-                                RemoveFav
-                            </button>
-                        </th>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    );
-}
-
-function ingredient_info(key, ingredient) {
-    return (
-        <div key={key}>
-            <table>
-                <tbody>
-                    <tr>
-                        {/* <th>{ingredient.id}</th> */}
-                        <th>{ingredient.ingredient_name}</th>
-                        {/* <th>{ingredient.image_url}</th> */}
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    );
 }
 
 const mapStateToProps = (state) => {
     return {
         token_id: state.authReducer.token,
+        favorite_recipe: state.favoriteReducer.favorite_recipe,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onFavoriteAdded: (recipe_id, token) =>
-            dispatch(actions.addFavoriteCheck(recipe_id, token)),
-        onFavoriteRemoved: (recipe_id, token) =>
-            dispatch(actions.removeFavoriteCheck(recipe_id, token)),
+        onFavoriteAdded: (recipe_id, token_id) =>
+            dispatch(actions.addFavoriteCheck(recipe_id, token_id)),
+        onFavoriteRemoved: (recipe_id, token_id) =>
+            dispatch(actions.removeFavoriteCheck(recipe_id, token_id)),
+        onInitializeFavorite: (token_id) => {
+            dispatch(actions.authFavorite(token_id));
+        },
     };
 };
 
