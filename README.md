@@ -9,9 +9,13 @@ Users can select whether they want to register to be a member. The majority diff
 
 
 INSTALL:
-git clone https://github.com/uycuhnt2467/LeftoverKiller_Web.git
-cd LeftoverKiller_Web
-npm install --save
+<ol>
+<li>git clone https://github.com/uycuhnt2467/LeftoverKiller_Web.git
+<li>cd LeftoverKiller_Web
+<li>npm install --save
+</ol>
 
 RUN:
-npm start
+<ol>
+<li>npm start
+</ol>
