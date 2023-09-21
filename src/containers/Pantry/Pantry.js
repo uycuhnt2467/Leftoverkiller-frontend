@@ -52,46 +52,10 @@ class Pantry extends Component {
             return <Redirect to='/matching' />
         }
     }
-  
 
-    // handleAddClick = (e) => {
-    //     e.preventDefault();
-    //     this.props.onIngredientAdded(this.state.currentQuery);
-    //     this.setState((prevState) => ({
-    //         currentQuery: "",
-    //     }));
-    // };
-
-    // handleRemoveClick = (e) => {
-    //     e.preventDefault();
-    //     this.props.onIngredientRemoved(e.target.value);
-    // };
-
-    // handleSearchClick = (e) => {
-    //     e.preventDefault();
-    //     const cors = "https://cors-anywhere.herokuapp.com/";
-    //     const url =
-    //         "http://18.222.31.30/leftover_killer/get_matching_recipes.php";
-    //     axios
-    //         .post(`${cors}${url}`, { ingredients: this.props.ingredient_list })
-    //         .then((res) => {
-    //             // http://18.222.31.30/leftover_killer/get_recipes.php
-    //             // http://localhost/leftoverkiller2/get_recipes.php
-    //             // console.log(res.data);
-    //             const recipes = res.data.recipes;
-    //             // console.log(recipes);
-    //             if (res.data.success) {
-    //                 this.setState({
-    //                     success: res.data.success,
-    //                     matching_recipe: recipes,
-    //                 });
-    //             } else {
-    //                 console.log("no return");
-    //             }
-
-    //             //
-    //         });
-    // };
+    handleSearchClick = (e) => {
+        e.preventDefault();
+    };
 
     render() {
         let cur_ingredient = <Spinner />;
