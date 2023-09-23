@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
+const configg = require('../../config/development_config')
 
 export const authStart = () => {
     return {
@@ -59,10 +60,10 @@ export const auth = (username, email, password, isSignup) => {
         const config = {
             "Content-Type": "x-www-form-urlencoded",
         };
-        let url = "http://3.12.253.9:3000/register";
+        let url = configg.backend_addr + "/register";
 
         if (!isSignup) {
-            url = "http://3.12.253.9:3000/login";
+            url = configg.backend_addr + "/login";
         }
 
         axios

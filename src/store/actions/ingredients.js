@@ -2,6 +2,8 @@ import * as actionTypes from "./actionTypes";
 import axios from "axios";
 const qs = require("querystring");
 
+const config_ = require("../../config/development_config")
+
 export const addIngredient = (ingredient) => {
     return {
         type: actionTypes.ADD_INGREDIENT,
@@ -20,7 +22,7 @@ export const addIngredientCheck = (ingredient_id, token_id) => {
         const ingredientData = {
             ingredient_id: ingredient_id,
         };
-        let url = "http://3.12.253.9:3000/ingredient/";
+        let url = config_.backend_addr + "/ingredient/";
 
         axios
             .get(`${url}${ingredient_id}`)
@@ -28,7 +30,7 @@ export const addIngredientCheck = (ingredient_id, token_id) => {
                 const ingredient = response.data.result;
                 // console.log(ingredient);
                 if (token_id !== null) {
-                    url = "http://3.12.253.9:3000/pantry/id";
+                    url = config.backend_addr + "/pantry/id";
                     axios
                         .post(url, qs.stringify(ingredientData), config)
                         .then((response) => {
@@ -69,7 +71,7 @@ export const removeIngredientCheck = (ingredient_id, token_id) => {
                 }),
             };
 
-            const url = "http://3.12.253.9:3000/pantry";
+            const url = config.backend_addr + "/pantry";
             axios
                 .delete(url, config)
                 .then((response) => {
@@ -124,8 +126,8 @@ export const authPantry = (tokenid) => {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
             };
-
-            const url = "http://3.12.253.9:3000/pantry";
+            const url = config.backend_addr + "/pantry";
+         
             axios
                 .get(url, config)
                 .then((response) => {

@@ -8,6 +8,8 @@ import * as actions from "../../store/actions/index";
 import RecipeDetail from "./RecipeDetail/RecipeDetail";
 import classes from "./Recipe.module.css";
 
+const config = require("../../config/development_config");
+
 class Recipe extends Component {
     state = {
         success: false,
@@ -37,7 +39,7 @@ class Recipe extends Component {
             this.setState({ inFavorite: true });
         }
 
-        let url = "http://3.12.253.9:3000/recipe/";
+        let url = config.backend_addr + "/recipe/";
 
         axios.get(`${url}${recipeId}`).then((res) => {
             this.setState((prevState) => {

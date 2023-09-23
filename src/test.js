@@ -1,10 +1,12 @@
 import axios from "axios";
 
+config = require("./development_config")
+
 const recipeData = {
     recipe_id: recipeId,
     rass: "lalala",
 };
-const url = "http://3.12.253.9:3000/favorite";
+const url = config.backend_addr + "/favorite";
 console.log(recipeData);
 axios
     .post(url, recipeData, config)

@@ -9,6 +9,8 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import ingredientDisplay from "./IngredientDisplay/IngredientDisplay";
 import classes from "./SearchByIngredient.module.css";
 
+const config = require("../../config/development_config")
+
 class SearchIngredient extends Component {
     // constructor(props) {
     //     super(props);
@@ -37,7 +39,7 @@ class SearchIngredient extends Component {
 
     componentDidMount() {
         // const cors = "https://cors-anywhere.herokuapp.com/";
-        const url = "http://3.12.253.9:3000/ingredient";
+        const url = config.backend_addr + "/ingredient";
         axios.get(url).then((res) => {
             if (res.data.result.success) {
                 this.setState({

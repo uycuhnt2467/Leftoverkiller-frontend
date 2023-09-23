@@ -9,6 +9,8 @@ import MatchingRecipeDisplay from "./MatchingRecipeDisplay/MatchingRecipeDisplay
 
 import classes from "./MatchingRecipe.module.css";
 
+const config = require("../../config/development_config")
+
 class MatchingRecipe extends Component {
     state = {
         success: false,
@@ -35,7 +37,7 @@ class MatchingRecipe extends Component {
             ingredients: ingredient,
         };
         console.log(ingredientData);
-        const url = "http://3.12.253.9:3000/search";
+        const url = config.backend_addr + "/search";
         axios.post(url, ingredientData).then((result) => {
             console.log(result.data.result);
             if (result.data.result.success) {

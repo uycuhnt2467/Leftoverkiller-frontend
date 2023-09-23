@@ -9,6 +9,8 @@ import IngredeintDetail from "./IngredientDetail/IngredientDetail";
 
 import classes from "./Ingredient.module.css";
 
+const config = require("../../config/development_config")
+
 class Ingredient extends Component {
     state = {
         success: false,
@@ -35,7 +37,7 @@ class Ingredient extends Component {
             this.setState({ inPantry: true });
         }
 
-        let url = "http://3.12.253.9:3000/ingredient/";
+        let url = config.backend_addr + "/ingredient/";
 
         axios.get(`${url}${ingredient_id}`).then((res) => {
             if (res.data.result.success) {

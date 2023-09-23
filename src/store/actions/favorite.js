@@ -26,7 +26,7 @@ export const addFavoriteCheck = (recipeId, token_id) => {
         const recipeData = {
             recipe_id: recipeId,
         };
-        let url = "http://3.12.253.9:3000/recipe/";
+        let url = config.backend_addr + "/recipe/";
         // console.log(token_id);
         axios
             .get(`${url}${recipeId}`)
@@ -34,7 +34,7 @@ export const addFavoriteCheck = (recipeId, token_id) => {
                 const recipe = response.data.result;
                 // console.log(recipe);
                 if (token_id !== null) {
-                    url = "http://3.12.253.9:3000/favorite";
+                    url = config.backend_addr + "/favorite";
                     axios
                         .post(url, qs.stringify(recipeData), config)
                         .then((response) => {
@@ -75,7 +75,7 @@ export const removeFavoriteCheck = (recipeId, token_id) => {
                 }),
             };
 
-            const url = "http://3.12.253.9:3000/favorite";
+            const url = config.backend_addr + "/favorite";
             axios
                 .delete(url, config)
                 .then((response) => {
@@ -125,7 +125,7 @@ export const authFavorite = (tokenid) => {
                 },
             };
 
-            const url = "http://3.12.253.9:3000/favorite";
+            const url = config.backend_addr + "/favorite";
             axios
                 .get(url, config)
                 .then((response) => {

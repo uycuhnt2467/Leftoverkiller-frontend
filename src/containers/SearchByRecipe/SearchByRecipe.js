@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
@@ -9,12 +8,11 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./SearchByRecipe.module.css";
 // import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 // import * as actions from "../../store/actions/index";
+const config = require("../../config/development_config");
+
 
 class SearchIngredient extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {...}
-    // }
+
     state = {
         allrecipe: [
             {
@@ -38,7 +36,8 @@ class SearchIngredient extends Component {
 
     componentDidMount() {
         // const cors = "https://cors-anywhere.herokuapp.com/";
-        const url = "http://3.12.253.9:3000/recipe";
+        const url = config.backend_addr + "/recipe";
+
 
         // `${cors}${url}`
         axios.get(url).then((res) => {
@@ -99,6 +98,7 @@ class SearchIngredient extends Component {
 
     render() {
         let curRecipe = <Spinner />;
+        
         if (this.state.loading) {
             // if (this.state.success) {
             curRecipe = this.state.currentRecipe.map((val) => {
