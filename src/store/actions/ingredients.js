@@ -30,7 +30,7 @@ export const addIngredientCheck = (ingredient_id, token_id) => {
                 const ingredient = response.data.result;
                 // console.log(ingredient);
                 if (token_id !== null) {
-                    url = config.backend_addr + "/pantry/id";
+                    url = config_.backend_addr + "/pantry/id";
                     axios
                         .post(url, qs.stringify(ingredientData), config)
                         .then((response) => {
@@ -71,7 +71,7 @@ export const removeIngredientCheck = (ingredient_id, token_id) => {
                 }),
             };
 
-            const url = config.backend_addr + "/pantry";
+            const url = config_.backend_addr + "/pantry";
             axios
                 .delete(url, config)
                 .then((response) => {
@@ -118,7 +118,6 @@ export const authPantry = (tokenid) => {
     return (dispatch) => {
         dispatch(initializePantry());
         if (tokenid !== null) {
-            // console.log("intilize pantry action");
             dispatch(clearPantry());
             let config = {
                 headers: {
@@ -126,30 +125,29 @@ export const authPantry = (tokenid) => {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
             };
-            const url = config.backend_addr + "/pantry";
+            const url = config_.backend_addr + "/pantry";
          
             axios
                 .get(url, config)
                 .then((response) => {
-                    // console.log(response.data.result);
-                    const tempIngredientArray = response.data.result.ingredients.map(
-                        (val) => {
-                            return {
-                                ingredient_id: val.ingredient_id,
-                                ingredient_name: val.ingredient_name,
-                                image_url: val.img_url,
-                            };
-                        }
-                    );
-                    // console.log(tempIngredientArray);
-                    dispatch(fetchPantry(tempIngredientArray));
+                    const result = response.data.result;
+                    if (result && result.ingredients && Array.isArray(result.ingredients)) {
+                        const tempIngredientArray = result.ingredients.map((val) => ({
+                            ingredient_id: val.ingredient_id,
+                            ingredient_name: val.ingredient_name,
+                            image_url: val.img_url,
+                        }));
+                        dispatch(fetchPantry(tempIngredientArray));
+                    } else {
+                        // Handle the case where result.ingredients is not an array
+                        dispatch(clearPantry());
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
-                    // TODO:
+                    // TODO: Handle the error as needed
                     dispatch(clearPantry());
                 });
-            //
         } else {
             dispatch(fetchPantryEnd());
         }

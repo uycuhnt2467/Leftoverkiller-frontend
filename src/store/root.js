@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
+import * as actionTypes from "./actions/actionTypes";
 import thunk from "redux-thunk";
 
 // persist store
@@ -13,7 +14,7 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-    if (action.type === "CLEAR_STORE") return appReducer(undefined, action);
+    if (action.type === actionTypes.CLEAR_STORE) return appReducer(undefined, action);
     return appReducer(state, action);
 };
 

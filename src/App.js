@@ -22,8 +22,9 @@ import * as actions from "./store/actions/index";
 
 class App extends Component {
     componentDidMount() {
-        this.props.onTryAutoSignup();
-        // this.props.onInitializeFavorite();
+        this.props.onTryAutoSignIn();
+        this.props.onInitializeFavorite(this.props.token_id);
+        this.props.onInitializaPantry(this.props.token_id);
     }
     render() {
         let routes = (
@@ -86,13 +87,15 @@ class App extends Component {
 const mapStateToProps = (state) => {
     return {
         isAuthenticated: state.authReducer.token !== null,
+        token_id: state.authReducer.token,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onTryAutoSignup: () => dispatch(actions.authCheckState()),
-        // onInitializeFavorite: () => dispatch(actions.authFavorite())
+        onTryAutoSignIn: () => dispatch(actions.authCheckState()),
+        onInitializeFavorite: (token_id) => dispatch(actions.authFavorite(token_id)),
+        onInitializaPantry: (token_id) => dispatch(actions.authPantry(token_id))
     };
 };
 

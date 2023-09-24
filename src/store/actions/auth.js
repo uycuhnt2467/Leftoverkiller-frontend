@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
-const configg = require('../../config/development_config')
+const config_ = require('../../config/development_config')
 
 export const authStart = () => {
     return {
@@ -60,12 +60,12 @@ export const auth = (username, email, password, isSignup) => {
         const config = {
             "Content-Type": "x-www-form-urlencoded",
         };
-        let url = configg.backend_addr + "/register";
+        let url = config_.backend_addr + "/register";
 
         if (!isSignup) {
-            url = configg.backend_addr + "/login";
+            url = config_.backend_addr + "/login";
         }
-
+        console.log(authData);
         axios
             .post(url, authData, config)
             .then((response) => {
@@ -79,7 +79,7 @@ export const auth = (username, email, password, isSignup) => {
                     const expirationDate = new Date(
                         new Date().getTime() + 1000 * 1000
                     );
-                    // localStorage.setItem("token", response.headers.token);
+                    // localStorage.setItem("token", response.data.result.token);
                     localStorage.setItem("expirationDate", expirationDate);
 
                     dispatch(authSuccess(response.data.result.token));

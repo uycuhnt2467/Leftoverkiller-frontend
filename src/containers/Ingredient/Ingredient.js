@@ -5,7 +5,7 @@ import axios from "axios";
 import Aux from "../../hoc/Auxx/Auxx";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import * as actions from "../../store/actions/index";
-import IngredeintDetail from "./IngredientDetail/IngredientDetail";
+import IngredintDetail from "./IngredientDetail/IngredientDetail";
 
 import classes from "./Ingredient.module.css";
 
@@ -41,6 +41,7 @@ class Ingredient extends Component {
 
         axios.get(`${url}${ingredient_id}`).then((res) => {
             if (res.data.result.success) {
+                console.log(res.data.result)
                 this.setState((prevState) => {
                     return {
                         ...prevState,
@@ -72,7 +73,7 @@ class Ingredient extends Component {
         if (!this.state.loading) {
             if (!this.state.inPantry) {
                 curIngredient = (
-                    <IngredeintDetail
+                    <IngredintDetail
                         ingredientInfo={this.state.ingredient}
                         clickedFunction={this.handleAddPantry}
                         pantryChecked={this.state.inPantry}
@@ -80,7 +81,7 @@ class Ingredient extends Component {
                 );
             } else {
                 curIngredient = (
-                    <IngredeintDetail
+                    <IngredintDetail
                         ingredientInfo={this.state.ingredient}
                         clickedFunction={this.handleRemovePantry}
                         pantryChecked={this.state.inPantry}

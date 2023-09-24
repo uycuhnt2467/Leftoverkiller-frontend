@@ -6,6 +6,8 @@ import * as actions from "../../../store/actions/index";
 
 class Logout extends Component {
     componentDidMount() {
+        this.props.onClearMemberFavorite();
+        this.props.onClearMemberPantry();
         this.props.onLogout();
     }
     render() {
@@ -15,7 +17,9 @@ class Logout extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogout: () => dispatch(actions.clearStore()),
+        onClearMemberFavorite: () => dispatch(actions.clearFavorite()),
+        onClearMemberPantry: () => dispatch(actions.clearPantry()),
+        onLogout: () => dispatch(actions.logout()),
     };
 };
 

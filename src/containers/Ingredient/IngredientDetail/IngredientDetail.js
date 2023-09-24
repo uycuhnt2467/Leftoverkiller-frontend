@@ -35,7 +35,7 @@ const ingredientDetailInfo = (props) => {
     }
 
     return (
-        <div className={classes.item} key={props.ingredientInfo.ingredient_id}>
+        <div className={classes.item} key={props.ingredientInfo.ingredient_id + "ingredient"}>
             <div className={classes.itemName}>
                 {props.ingredientInfo.ingredient_name
                     .split(" ")
@@ -60,7 +60,7 @@ const ingredientDetailInfo = (props) => {
 function recipe_info(key, recipe) {
     let link_string = "/recipe/" + recipe.recipe_id;
     return (
-        <div className={classes.displayItem} key={recipe.recipe_id}>
+        <div className={classes.displayItem} key={key}>
             <div className={classes.displayItemImgSize}>
                 <Link to={link_string}>
                     <img
