@@ -12,35 +12,77 @@ import * as actions from "../../store/actions/index";
 class Favroite extends Component {
     state = {
         success: false,
-        favorite_recipe_info: [
+        filter_favorite_recipe_info: [
             // {
             //     recipe_id: "",
             //     recipe_name: "",
             //     img_url: "",
             // }
         ],
+        all_favorite_recipe_info : [],
+        currentQuery: "",
         error: "",
     };
 
     componentDidMount() {
-        // console.log(this.props.token_id);
         this.props.onInitializeFavorite(this.props.token_id);
-        // console.log("initilaize favorite");
-        // console.log(this.props.favorite_recipe);
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                all_favorite_recipe_info: this.props.favorite_recipe,
+                filter_favorite_recipe_info: this.props.favorite_recipe,
+            }
+        })
+
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.favorite_recipe !== prevProps.favorite_recipe) {
+            this.setState({
+                filter_favorite_recipe_info: this.props.favorite_recipe,
+            });
+        }
+    }
+
+    handleSearchChange = (e) => {
+        e.preventDefault();
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                currentQuery: e.target.value,
+            };
+        });
+    };
+
+    handleSearchClick = (e) => {
+        e.preventDefault();
+
+        let newRecipeResult = this.state.all_favorite_recipe_info.filter((rec) => {
+            return rec.recipe_name
+                .toLowerCase()
+                .includes(this.state.currentQuery);
+        });
+
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                filter_favorite_recipe_info: newRecipeResult,
+            };
+        });
+    };
+
     render() {
-        let favorite_recipe_info = <Spinner />;
+        let filter_favorite_recipe = <Spinner />;
         if (!this.props.loading) {
             if (this.props.favorite_recipe.length === 0) {
-                favorite_recipe_info = (
+                filter_favorite_recipe = (
                     <h1 className={classes.noItemTitle}>
                         No recipe in the favorite list, add recipe{" "}
                         <Link to="/">here</Link>.
                     </h1>
                 );
             } else {
-                favorite_recipe_info = this.props.favorite_recipe.map((val) => {
+                filter_favorite_recipe = this.state.filter_favorite_recipe_info.map((val) => {
                     return FavoriteRecipeDisplay(val);
                 });
             }
@@ -51,7 +93,7 @@ class Favroite extends Component {
                     <h1 className={classes.title}>Favorite Recipe</h1>
                     <input
                         type="text"
-                        // onChange={this.handleSearchChange}
+                        onChange={this.handleSearchChange}
                         name="curSearch"
                         placeholder="Any Recipe"
                         value={this.state.currentQuery}
@@ -61,7 +103,7 @@ class Favroite extends Component {
                     </button>
                 </div>
                 <div className={classes.flex_container}>
-                    {favorite_recipe_info}
+                    {filter_favorite_recipe}
                 </div>
             </Aux>
         );
