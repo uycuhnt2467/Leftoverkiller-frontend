@@ -13,10 +13,12 @@ const Favorite = (props) => {
 
     useEffect(() => {
         props.onInitializeFavorite(props.token_id);
+        return () => { setFilterFavoriteRecipeInfo([]);}
     }, [props.token_id]);
 
     useEffect(() => {
         setFilterFavoriteRecipeInfo(props.favorite_recipe);
+        return () => { setFilterFavoriteRecipeInfo([]);}
     }, [props.favorite_recipe])
 
     const handleSearchChange = (e) => {
