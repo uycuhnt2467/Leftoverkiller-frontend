@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -10,97 +10,78 @@ import classes from "./Recipe.module.css";
 
 const config = require("../../config/development_config");
 
-class Recipe extends Component {
-    state = {
-        success: false,
-        // recipe: {
-        //     recipe_id: "",
-        //     recipe_name: "",
-        //     popularity: 0,
-        //     instructions: "",
-        //     img_url: "",
-        //     ingredients: [],
-        // },
-        error: "",
-        loading: true,
-        inFavorite: false,
-    };
+const Recipe = (props) => {
+    const [loading, setLoading] = useState(true);
+    const [inFavorite, setInFavorite] = useState(false);
+    const [recipe, setRecipe] = useState({
+        recipe_id: "",
+        recipe_name: "",
+        popularity: 0,
+        instructions: "",
+        img_url: "",
+        ingredients: [],
+    });
 
-    componentDidMount() {
-        const { recipeId } = this.props.match.params;
-        this.props.onInitializeFavorite(this.props.token_id);
+    useEffect(() => {
+        const { recipeId } = props.match.params;
+        props.onInitializeFavorite(props.token_id);
 
-        const inFavoriteCheck = this.props.favorite_recipe.filter(
+        const inFavoriteCheck = props.favorite_recipe.filter(
             (val) => parseInt(val.recipe_id) === parseInt(recipeId)
         );
         if (inFavoriteCheck.length === 0) {
-            this.setState({ inFavorite: false });
+            setInFavorite(false);
         } else {
-            this.setState({ inFavorite: true });
+            setInFavorite(true);
         }
 
         let url = config.backend_addr + "/recipe/";
 
         axios.get(`${url}${recipeId}`).then((res) => {
-            this.setState((prevState) => {
-                return {
-                    ...prevState,
-                    success: res.data.result.success,
-                    recipe: res.data.result,
-                    loading: false,
-                };
-            });
-            // console.log(this.state);
+            setRecipe(res.data.result);
+            setLoading(false);
         });
-    }
+    }, [props.token_id]);
 
-    handleAddFavorite = (e) => {
+    const handleAddFavorite = (e) => {
         e.preventDefault();
-        this.props.onFavoriteAdded(e.target.value, this.props.token_id);
-        this.setState({ inFavorite: true });
+        props.onFavoriteAdded(e.target.value, props.token_id);
+        setInFavorite(true);
     };
 
-    handleRemoveFavorite = (e) => {
+    const handleRemoveFavorite = (e) => {
         e.preventDefault();
-        // console.log(e.target.value);
-        this.props.onFavoriteRemoved(e.target.value, this.props.token_id);
-        this.setState({ inFavorite: false });
+        props.onFavoriteRemoved(e.target.value, props.token_id);
+        setInFavorite(false);
     };
 
-    render() {
-        let curRecipe = <Spinner />;
-        if (!this.state.loading) {
-            // curRecipe = recipe_info(
-            //     0,
-            //     this.state.recipe,
-            //     this.handleAddFavorite,
-            //     this.handleRemoveFavorite
-            // );
-            if (!this.state.inFavorite) {
-                curRecipe = (
-                    <RecipeDetail
-                        recipeInfo={this.state.recipe}
-                        clickedFunction={this.handleAddFavorite}
-                        favoriteChecked={this.state.inFavorite}
-                    />
-                );
-            } else {
-                curRecipe = (
-                    <RecipeDetail
-                        recipeInfo={this.state.recipe}
-                        clickedFunction={this.handleRemoveFavorite}
-                        favoriteChecked={this.state.inFavorite}
-                    />
-                );
-            }
+    let curRecipe = <Spinner />;
+    if (!loading) {
+        if (!inFavorite) {
+            curRecipe = (
+                <RecipeDetail
+                    recipeInfo={recipe}
+                    clickedFunction={handleAddFavorite}
+                    favoriteChecked={inFavorite}
+                />
+            );
+        } else {
+            curRecipe = (
+                <RecipeDetail
+                    recipeInfo={recipe}
+                    clickedFunction={handleRemoveFavorite}
+                    favoriteChecked={inFavorite}
+                />
+            );
         }
-        return (
-            <Aux>
-                <div className={classes.flex_container}>{curRecipe}</div>
-            </Aux>
-        );
     }
-}
+
+    return (
+        <Aux>
+            <div className={classes.flex_container}>{curRecipe}</div>
+        </Aux>
+    );
+};
 
 const mapStateToProps = (state) => {
     return {
@@ -122,4 +103,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recipe);
-// export default Recipe;
