@@ -1,120 +1,81 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-
 import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
 import Spinner from "../../components/UI/Spinner/Spinner";
-// import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import ingredientDisplay from "./IngredientDisplay/IngredientDisplay";
 import classes from "./SearchByIngredient.module.css";
 
-const config = require("../../config/development_config")
+const config = require("../../config/development_config");
 
-class SearchIngredient extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {...}
-    // }
-    state = {
-        allIngredients: [
-            // {
-            //     ingredient_id: "",
-            //     ingredient_name: "",
-            //     img_url: "",
-            // },
-        ],
-        currentIngredients: [
-            // {
-            //     ingredient_id: "",
-            //     ingredient_name: "",
-            //     img_url: "",
-            // },
-        ],
-        currentQuery: "",
-        loading: true,
-        success: false,
-        // err: "",
-    };
+const SearchIngredient = () => {
+    const [allIngredients, setAllIngredients] = useState([]);
+    const [currentIngredients, setCurrentIngredients] = useState([]);
+    // {
+    //     ingredient_id: "",
+    //     ingredient_name: "",
+    //     img_url: "",
+    // },
+    const [currentQuery, setCurrentQuery] = useState("");
+    const [loading, setLoading] = useState(true);
 
-    componentDidMount() {
-        // const cors = "https://cors-anywhere.herokuapp.com/";
+    useEffect(() => {
         const url = config.backend_addr + "/ingredient";
+
         axios.get(url).then((res) => {
             if (res.data.result.success) {
-                this.setState({
-                    success: true,
-                    allIngredients: res.data.result.ingredients,
-                    currentIngredients: res.data.result.ingredients,
-                    loading: false,
-                });
+                setAllIngredients(res.data.result.ingredients);
+                setCurrentIngredients(res.data.result.ingredients);
+                setLoading(false);
             } else {
-                this.setState({
-                    success: false,
-                    allIngredients: [],
-                    currentIngredients: [],
-                    loading: false,
-                });
-                console.log("no return");
+                setAllIngredients([]);
+                setCurrentIngredients([]);
+                setLoading(false);
             }
         });
-    }
+    }, []);
 
-    handleIngredientInputChange = (e) => {
+    const handleIngredientInputChange = (e) => {
         e.preventDefault();
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                currentQuery: e.target.value,
-            };
-        });
+        setCurrentQuery(e.target.value);
     };
 
-    handleSearchClick = (e) => {
+    const handleSearchClick = (e) => {
         e.preventDefault();
-        let newIngredientsResult = this.state.allIngredients.filter((ing) => {
-            return ing.ingredient_name
-                .toLowerCase()
-                .includes(this.state.currentQuery);
+        let newIngredientsResult = allIngredients.filter((ing) => {
+            return ing.ingredient_name.toLowerCase().includes(currentQuery);
         });
 
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                currentIngredients: newIngredientsResult,
-            };
-        });
+        setCurrentIngredients(newIngredientsResult);
     };
 
-    render() {
-        let curIngredient = <Spinner />;
-        if (!this.state.loading) {
-            curIngredient = this.state.currentIngredients.map((val) => {
-                return ingredientDisplay(val);
-            });
-        }
-
-        return (
-            <Aux>
-                <div className={classes.inputDiv}>
-                    <h1>Find Ingredient and Add into Pantry</h1>
-                    <input
-                        type="text"
-                        onChange={this.handleIngredientInputChange}
-                        name="curSearch"
-                        placeholder="Any Ingredient"
-                        value={this.state.currentQuery}
-                    ></input>
-                    <button type="submit" onClick={this.handleSearchClick}>
-                        Search
-                    </button>
-                </div>
-                <div className={classes.flex_container}>{curIngredient}</div>
-            </Aux>
-        );
+    let curIngredient = <Spinner />;
+    if (!loading) {
+        curIngredient = currentIngredients.map((val) => {
+            return ingredientDisplay(val);
+        });
     }
-}
-// define components
+
+    return (
+        <Aux>
+            <div className={classes.inputDiv}>
+                <h1>Find ingredients and add them into pantry</h1>
+                <input
+                    type="text"
+                    onChange={handleIngredientInputChange}
+                    name="curSearch"
+                    placeholder="Any Ingredient"
+                    value={currentQuery}
+                ></input>
+                <button type="submit" onClick={handleSearchClick}>
+                    Search
+                </button>
+            </div>
+            <div className={classes.flex_container}>{curIngredient}</div>
+        </Aux>
+    );
+};
 
 const mapStateToProps = (state) => {
     return {
@@ -122,17 +83,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         onIngredientAdded: (ingName) =>
-//             dispatch(actions.addIngredient(ingName)),
-//         onIngredientRemoved: (ingName) =>
-//             dispatch(actions.removeIngredient(ingName)),
-//     };
-// };
-
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(withErrorHandler(BurgerBuilder, axios));
 export default connect(mapStateToProps, null)(SearchIngredient);
