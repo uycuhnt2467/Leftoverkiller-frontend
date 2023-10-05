@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -9,93 +9,95 @@ import IngredintDetail from "./IngredientDetail/IngredientDetail";
 
 import classes from "./Ingredient.module.css";
 
-const config = require("../../config/development_config")
+const config = require("../../config/development_config");
 
-class Ingredient extends Component {
-    state = {
+const Ingredient = (props) => {
+    const [state, setState] = useState({
         success: false,
         ingredient: {},
-        // ingredient_id: "",
-        // ingredient_name: "",
-        // image_url: "",
-        // recipe: [],
         error: "",
         loading: true,
         inPantry: false,
-    };
+    });
 
-    componentDidMount() {
-        this.props.onInitializePantry(this.props.token_id);
-        const { ingredient_id } = this.props.match.params;
-        // console.log(ingredient_id);
-        const inPantryCheck = this.props.ingredient_list.filter(
+    useEffect(() => {
+        props.onInitializePantry(props.token_id);
+        const { ingredient_id } = props.match.params;
+        const inPantryCheck = props.ingredient_list.filter(
             (val) => parseInt(val.ingredient_id) === parseInt(ingredient_id)
         );
         if (inPantryCheck.length === 0) {
-            this.setState({ inPantry: false });
+            setState((prevState) => ({
+                ...prevState,
+                inPantry: false,
+            }));
         } else {
-            this.setState({ inPantry: true });
+            setState((prevState) => ({
+                ...prevState,
+                inPantry: true,
+            }));
         }
 
         let url = config.backend_addr + "/ingredient/";
-
+        // TODO: add cache
         axios.get(`${url}${ingredient_id}`).then((res) => {
             if (res.data.result.success) {
-                console.log(res.data.result)
-                this.setState((prevState) => {
-                    return {
-                        ...prevState,
-                        ingredient: res.data.result,
-                        success: res.data.result.success,
-                        error: "",
-                        loading: false,
-                    };
-                });
+                setState((prevState) => ({
+                    ...prevState,
+                    ingredient: res.data.result,
+                    success: res.data.result.success,
+                    error: "",
+                    loading: false,
+                }));
             }
         });
-    }
+    }, [props.token_id]);
 
-    handleAddPantry = (e) => {
-        // console.log(e.target.value, this.props.token_id);
+    const handleAddPantry = (e) => {
         e.preventDefault();
-        this.props.onPantryAdded(e.target.value, this.props.token_id);
-        this.setState({ inPantry: true });
+        props.onPantryAdded(e.target.value, props.token_id);
+        setState((prevState) => ({
+            ...prevState,
+            inPantry: true,
+        }));
     };
 
-    handleRemovePantry = (e) => {
+    const handleRemovePantry = (e) => {
         e.preventDefault();
-        this.props.onPantryRemoved(e.target.value, this.props.token_id);
-        this.setState({ inPantry: false });
+        props.onPantryRemoved(e.target.value, props.token_id);
+        setState((prevState) => ({
+            ...prevState,
+            inPantry: false,
+        }));
     };
 
-    render() {
-        let curIngredient = <Spinner />;
-        if (!this.state.loading) {
-            if (!this.state.inPantry) {
-                curIngredient = (
-                    <IngredintDetail
-                        ingredientInfo={this.state.ingredient}
-                        clickedFunction={this.handleAddPantry}
-                        pantryChecked={this.state.inPantry}
-                    />
-                );
-            } else {
-                curIngredient = (
-                    <IngredintDetail
-                        ingredientInfo={this.state.ingredient}
-                        clickedFunction={this.handleRemovePantry}
-                        pantryChecked={this.state.inPantry}
-                    />
-                );
-            }
+    let curIngredient = <Spinner />;
+    if (!state.loading) {
+        if (!state.inPantry) {
+            curIngredient = (
+                <IngredintDetail
+                    ingredientInfo={state.ingredient}
+                    clickedFunction={handleAddPantry}
+                    pantryChecked={state.inPantry}
+                />
+            );
+        } else {
+            curIngredient = (
+                <IngredintDetail
+                    ingredientInfo={state.ingredient}
+                    clickedFunction={handleRemovePantry}
+                    pantryChecked={state.inPantry}
+                />
+            );
         }
-        return (
-            <Aux>
-                <div className={classes.flex_container}>{curIngredient}</div>
-            </Aux>
-        );
     }
-}
+
+    return (
+        <Aux>
+            <div className={classes.flex_container}>{curIngredient}</div>
+        </Aux>
+    );
+};
 
 const mapStateToProps = (state) => {
     return {
@@ -116,4 +118,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Ingredient);
-// export default Recipe;
