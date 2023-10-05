@@ -1,159 +1,72 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import Aux from "../../hoc/Auxx/Auxx";
 import RecipeDisplay from "./RecipeDisplay/RecipeDisplay";
-
 import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./SearchByRecipe.module.css";
-// import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-// import * as actions from "../../store/actions/index";
 const config = require("../../config/development_config");
 
+const SearchByRecipe = () => {
+    const [allrecipe, setAllRecipe] = useState([]);
+    const [currentRecipe, setCurrentRecipe] = useState([]);
+    const [currentQuery, setCurrentQuery] = useState("");
+    const [loading, setLoading] = useState(false);
 
-class SearchIngredient extends Component {
-
-    state = {
-        allrecipe: [
-            {
-                recipe_id: "",
-                recipe_name: "",
-                img_url: "",
-            },
-        ],
-        currentRecipe: [
-            {
-                recipe_id: "",
-                recipe_name: "",
-                img_url: "",
-            },
-        ],
-        currentQuery: "",
-        loading: false,
-        success: false,
-        // err: "",
-    };
-
-    componentDidMount() {
-        // const cors = "https://cors-anywhere.herokuapp.com/";
+    useEffect(() => {
         const url = config.backend_addr + "/recipe";
 
-
-        // `${cors}${url}`
         axios.get(url).then((res) => {
-            // http://18.222.31.30/leftover_killer/get_recipes.php
-            // http://localhost/leftoverkiller2/get_recipes.php
-            // console.log(res);
-            // console.log("here");
-
             const recipes = res.data.result.recipes;
+            setAllRecipe(recipes);
+            setCurrentRecipe(recipes);
+            setLoading(true);
+        });
+    }, []);
 
-            this.setState({
-                allrecipe: recipes,
-                currentRecipe: recipes,
-                success: true,
-                loading: true,
-            });
+    const handleSearchChange = (e) => {
+        e.preventDefault();
+        setCurrentQuery(e.target.value);
+    };
+
+    const handleSearchClick = (e) => {
+        e.preventDefault();
+
+        let newRecipeResult = allrecipe.filter((rec) => {
+            return rec.recipe_name.toLowerCase().includes(currentQuery);
+        });
+
+        setCurrentRecipe(newRecipeResult);
+    };
+
+    let curRecipe = <Spinner />;
+
+    if (loading) {
+        curRecipe = currentRecipe.map((val) => {
+            return RecipeDisplay(val);
         });
     }
 
-    handleSearchChange = (e) => {
-        e.preventDefault();
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                currentQuery: e.target.value,
-            };
-        });
-        // let newRecipeResult = this.state.allrecipe.filter((rec) => {
-        //     return rec.recipe_name
-        //         .toLowerCase()
-        //         .includes(this.state.currentQuery);
-        // });
-
-        // this.setState((prevState) => {
-        //     return {
-        //         ...prevState,
-        //         currentRecipe: newRecipeResult,
-        //     };
-        // });
-    };
-
-    handleSearchClick = (e) => {
-        e.preventDefault();
-
-        let newRecipeResult = this.state.allrecipe.filter((rec) => {
-            return rec.recipe_name
-                .toLowerCase()
-                .includes(this.state.currentQuery);
-        });
-
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                currentRecipe: newRecipeResult,
-            };
-        });
-    };
-
-    render() {
-        let curRecipe = <Spinner />;
-        
-        if (this.state.loading) {
-            // if (this.state.success) {
-            curRecipe = this.state.currentRecipe.map((val) => {
-                return RecipeDisplay(val);
-            });
-        }
-
-        return (
-            <Aux>
-                <div>
-                    <div className={classes.inputDiv}>
-                        <h1>Find Recipe and Add into Favorite</h1>
-                        <input
-                            type="text"
-                            onChange={this.handleSearchChange}
-                            name="curSearch"
-                            placeholder="Any Recipe"
-                            value={this.state.currentQuery}
-                        ></input>
-                        <button type="submit" onClick={this.handleSearchClick}>
-                            Search
-                        </button>
-                    </div>
-                    <div className={classes.flex_container}>{curRecipe}</div>
+    return (
+        <Aux>
+            <div>
+                <div className={classes.inputDiv}>
+                    <h1>Find recipes and add them into favorite recipes</h1>
+                    <input
+                        type="text"
+                        onChange={handleSearchChange}
+                        name="curSearch"
+                        placeholder="Any Recipe"
+                        value={currentQuery}
+                    ></input>
+                    <button type="submit" onClick={handleSearchClick}>
+                        Search
+                    </button>
                 </div>
-            </Aux>
-        );
-    }
-}
+                <div className={classes.flex_container}>{curRecipe}</div>
+            </div>
+        </Aux>
+    );
+};
 
-// const mapStateToProps = (state) => {
-//     return {
-//         ings: state.burgerBuilder.ingredients,
-//         price: state.burgerBuilder.totalPrice,
-//         error: state.burgerBuilder.error,
-//         isAuthenticated: state.auth.token !== null,
-//     };
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         onIngredientAdded: (ingName) =>
-//             dispatch(actions.addIngredient(ingName)),
-//         onIngredientRemoved: (ingName) =>
-//             dispatch(actions.removeIngredient(ingName)),
-//         onInitIngredients: () => dispatch(actions.initIngredients()),
-//         onInitPurchase: () => dispatch(actions.purchaseInit()),
-//         onSetAuthRedirectPath: (path) =>
-//             dispatch(actions.setAuthRedirectPath(path)),
-//     };
-// };
-
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(withErrorHandler(SearchIngredient, axios));
-
-export default SearchIngredient;
+export default SearchByRecipe;
