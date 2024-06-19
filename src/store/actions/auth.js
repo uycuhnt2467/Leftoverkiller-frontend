@@ -53,7 +53,8 @@ export const auth = (username, email, password, isSignup) => {
         dispatch(authStart());
         const authData = {
             username: username,
-            email: email,
+            // TODO: fix email column
+            email: username,
             hash_password: password,
         };
 
